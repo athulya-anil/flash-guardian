@@ -1,147 +1,219 @@
-# Halo
+# Halo: AI-Powered Accessibility Extension  
 
-A dual-purpose Chrome browser extension for accessibility built for HackUmass 2025.
+<img src="icons/Halo.gif" width="600">
 
-**Halo** combines two powerful accessibility features:
-1. **Flash Protection**: Protects people with photosensitive epilepsy by detecting flashing content in videos
-2. **Text Summarizer**: AI-powered article summarization for people with ADHD/ADD
+**Halo** is a Chrome (Manifest V3) extension that makes the web safer and easier to read.  
+It combines **real-time photosensitive epilepsy protection** with **AI-powered reading assistance** for people with ADHD, dyslexia, and other reading challenges — built entirely in **vanilla JavaScript**, zero dependencies, and 100% local privacy.  
 
-## Project Overview
+---
 
-Halo is a Manifest V3 Chrome extension that serves two different user groups with distinct accessibility needs:
+## Key Features  
 
-- **For photosensitive users**: Real-time flash detection that monitors video content and automatically pauses when dangerous flashing patterns are detected (≥3 flashes per second), following WCAG 2.1 standards
-- **For users with ADHD/ADD**: AI-powered text summarization using Google Gemini or Groq APIs to condense long articles into digestible summaries
+### Photosensitive Epilepsy Protection  
+- **Real-time flash detection** on YouTube (including Shorts), TikTok, Twitter/X, Instagram, and Twitch  
+- Fully **WCAG 2.1-compliant luminance algorithm** with proper gamma correction (≥ 3 flashes/sec threshold)  
+- **Instant auto-pause** with full-screen warning overlay displaying frequency, count, and timestamp  
+- **Session analytics** — tracks videos monitored, warnings issued, and total flashes detected with anti-inflation logic
+- **Zero false positives** via dual brightness checks, warm-up periods, and intelligent threshold filtering
+- All video analysis **runs entirely in-browser** — no external data transmission
 
-All video processing happens locally in your browser for complete privacy. The extension features a clean popup interface that allows users to toggle between the two modes and customize their experience.
+### AI Reading Assistance  
+- **One-click text extraction** — "Auto-Fill from Page" button intelligently pulls article content from any webpage
+- **4-tier fallback extraction** — semantic HTML → common containers → text density heuristics → universal paragraph collection
+- Works seamlessly on Medium, Wikipedia, news sites, blogs, and any properly structured content
+- **Google Gemini 2.0-flash summarization**  
+  - *Quick Summary*: 2–3 sentence distillation for rapid comprehension
+  - *Bullet Summary*: 3–5 scannable key points  
+- **Real-time character tracking** with 15,000 character processing limit
+- **Instant clipboard copy** and **timestamped .txt downloads**
+- **5 ambient soundscapes** - Enables users to play calming background audio while reading
+- Designed for ADHD, dyslexia, and information processing challenges — useful for everyone
 
-## What It Does
+### Text-to-Speech with 10 Voice Personalities  
+Powered by **ElevenLabs multilingual v2** with studio-quality synthesis
 
-### Flash Protection
-Halo monitors videos on YouTube, TikTok, Twitter/X, Instagram, and Twitch. When it detects rapid flashing (3 or more flashes per second), it immediately pauses the video and shows a warning overlay, helping protect photosensitive users from potentially harmful content.
+Integrated HTML5 player with full playback controls, auto-play on generation, and collapsible interface.
 
-### Text Summarizer
-Condenses long articles and blog posts into easy-to-read summaries using Google's Gemini AI. Helps users with ADHD/ADD quickly grasp key information without reading lengthy content.
+Runs through Manifest V3 **offscreen document** for persistent background playback at 30% volume. Preferences persist across sessions.
 
-## Features
+### Dual-Mode Interface  
+- **Compact 400px popup** — quick access, instant toggles, live statistics
+- **Full-page web app** (via rocket icon 🚀) — extended sessions with enhanced controls
+  - Keyboard shortcuts (Ctrl/Cmd + Enter to generate)
+  - Multi-layer glowing result display
+  - Copy, Download, Listen action buttons
+  - Professional gradient layout with feature grid
+- **Configurable settings modal** for API keys (Gemini + ElevenLabs)
+- **Smart audio controls** with smooth reveal animations
 
-### Flash Protection
-- **Real-time Detection**: Analyzes video frames while you watch
-- **WCAG 2.1 Compliant**: Follows web accessibility standards for flash detection
-- **Auto-Pause**: Stops videos instantly when dangerous flashing is detected
-- **Privacy-First**: All processing happens locally in your browser
-- **Smart Filtering**: Avoids false alarms with warmup periods and brightness thresholds
-- **Statistics**: Track videos monitored, warnings issued, and flashes detected
+---
 
-### Text Summarizer
-- **AI-Powered**: Uses Google Gemini API for intelligent summarization
-- **Flexible Length**: Choose brief (2-3 sentences), moderate (1 paragraph), or detailed (bullet points)
-- **Smart Extraction**: Automatically finds and extracts main article content
-- **Copy to Clipboard**: Easy sharing of summaries
-- **Works Everywhere**: Summarize articles on any website
+## Tech Stack  
 
-## Technical Architecture
+| Layer | Implementation |
+|-------|----------------|
+| Core | **Vanilla JavaScript (ES6+)**, HTML5, CSS3 — zero build dependencies |
+| Platform | **Chrome Manifest V3**, Canvas API, Storage API, Offscreen API, Tabs API, Scripting API |
+| AI | **Google Gemini 2.0-flash** (summarization), **ElevenLabs v2** (text-to-speech) |
+| Architecture | Service Worker ↔ Content Scripts ↔ Popup ↔ Offscreen Document with message-based IPC |
+| Storage | Dual-layer sync + local with promise-queue serialization for race-condition safety |
+| Video Analysis | Canvas-based frame capture with true WCAG luminance math and gamma correction |
 
-- **Manifest Version**: 3
-- **Content Scripts**:
-  - `detector.js` - Flash detection logic for video platforms (YouTube, TikTok, Twitter/X, Instagram, Twitch)
-  - `summarizer.js` - Text summarization functionality (works on all websites)
-- **Background Worker**: `background.js` - Manages extension lifecycle and communication
-- **Popup Interface**: `popup.html` + `popup.js` - User settings, statistics, and controls
-- **AI Integration**: Supports Google Gemini and Groq APIs for intelligent text summarization
+---
 
-## How It Works
+## Installation  
 
-### Flash Protection
-
-The extension monitors videos using these steps:
-
-1. **Captures frames** from playing videos using the Canvas API
-2. **Calculates brightness** of each frame using WCAG 2.1 luminance formulas
-3. **Detects flashes** by tracking significant brightness changes between frames
-4. **Counts frequency** - if 3+ flashes occur within 1 second, it triggers a warning
-5. **Pauses video** and displays a warning overlay with statistics
-
-**Smart Detection:**
-- Skips the first 10 frames to avoid false positives during video loading
-- Ignores very dark frames (below 5% brightness) like loading screens
-- Detects saturated red flashes, which are particularly dangerous
-- Analyzes every 3rd frame and samples pixels for better performance
-
-### Text Summarizer
-
-1. **Extract Content**: Uses multiple strategies to find the main article text
-2. **Call Gemini API**: Sends text to Google's Gemini with optimized prompts
-3. **Generate Summary**: AI creates concise, ADHD-friendly summaries
-4. **Display Results**: Shows summary in popup with copy option
-
-## Installation
-
-1. Download or clone this repository
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" in the top-right corner
-4. Click "Load unpacked" and select the `flash-guardian` folder
-5. The extension icon will appear in your toolbar
-6. Refresh any open video pages to activate protection
-
-## Usage
-
-### Flash Protection (Default View)
-
-1. **Browse normally** - Halo runs automatically on supported sites
-2. **Watch videos** - Detection starts when any video begins playing
-3. **Get warnings** - If flashing is detected (≥3 flashes/second):
-   - Video pauses immediately
-   - Warning overlay appears showing:
-     - Flash frequency (flashes per second)
-     - Total flashes detected
-     - Timestamp where flashing occurred
-   - Choose to "Continue Anyway" or "Close Video"
-
-**Settings & Statistics:**
-- **Enable Protection**: Turn detection on/off
-- **Session Statistics**: Videos monitored, warnings issued, flashes detected
-- **Reset Statistics**: Clear session data
-
-### Text Summarizer
-
-**First Time Setup:**
-1. Click the Halo icon in your toolbar
-2. Click the ⚙️ settings icon at the top
-3. Choose your AI provider:
-   - **Google Gemini** (Recommended): Fast, high-quality summaries
-     - Get free API key: [Google AI Studio](https://aistudio.google.com/app/apikey)
-   - **Groq** (Free Alternative): Very fast, good quality with Llama models
-     - Get free API key: [Groq Console](https://console.groq.com/keys)
-     - Free tier: 30 requests/min
-4. Paste your API key and click "Save"
-
-**Using the Summarizer:**
-1. Navigate to any article or blog post
-2. Select and copy the text you want to summarize (Cmd/Ctrl+A then Cmd/Ctrl+C)
-3. Click the Halo icon
-4. Make sure you're in the Text Summarizer view (📝 icon)
-5. Paste the text into the text box (Cmd/Ctrl+V)
-6. Choose your summary length:
-   - **Brief**: 2-3 sentences
-   - **Moderate**: 1 paragraph (default)
-   - **Detailed**: Bullet point list
-7. Click "Generate Summary"
-8. Wait for AI to create your summary
-9. Use "Copy" button to copy summary to clipboard
-
-**Switching Between Views:**
-- Click the 🛡️ or 📝 icon in the top-right of the popup to toggle between Flash Protection and Text Summarizer
-
-### Console Logging
-
-Open DevTools (F12) → Console to see detection activity:
-```
-[Halo] Content script loaded
-[Halo] Found 1 video(s) on page
-[Halo] Initialized detector for video
-[Halo] Started monitoring video
-[Halo] Detection state reset
+```bash
+git clone https://github.com/athulya-anil/halo.git
+cd halo
 ```
 
-Built for HackUmass 2025
+1. Navigate to `chrome://extensions/`
+2. Enable **Developer mode** (top-right toggle)
+3. Click **Load unpacked** → select the `halo/` folder
+4. **Flash protection activates immediately** (no configuration needed)
+5. **For AI features:** Open extension → Settings → add API keys:
+   - [Gemini API Key](https://aistudio.google.com/) (required for summarization)
+   - [ElevenLabs API Key](https://elevenlabs.io/) (optional for TTS)
+   
+---
+
+## Technical Highlights  
+
+### Flash Detection Engine
+**WCAG 2.1 Implementation with Production-Grade Optimizations:**
+
+- **True luminance calculation** — sRGB → linear RGB gamma correction (2.4 exponent) → WCAG weighted formula (0.2126R + 0.7152G + 0.0722B)
+- **Intelligent sampling** — analyzes every 3rd frame, samples every 4th pixel, caps at 640×360 resolution for 12-48x performance gain
+- **False-positive elimination:**
+  - Dual brightness thresholds (ignores frames <5%, requires consecutive frames >5%)
+  - 10-frame warm-up period skips initialization artifacts
+  - Minimum 10% absolute luminance delta required
+  - Dark scene transitions intelligently filtered
+- **Platform-specific handlers:**
+  - YouTube standard + Shorts (`/shorts/VIDEO_ID` path detection)
+  - TikTok, Twitter/X, Instagram, Twitch with SPA navigation support
+- **Dynamic discovery** — MutationObserver with 500ms throttling auto-detects video injections
+
+**Warning System:**
+- Instant video pause on detection (≥3 flashes/second threshold)
+- Full-screen modal with blur backdrop, pulsing icon, slide-in animation
+- Detailed metrics: frequency, peak rate, total count, exact timestamp
+- Smart reset logic — clears warnings on seek to <10s, persists on forward seeks
+- Session statistics with cross-tab state synchronization
+- AI voice alert (can be turned on/off)
+
+### Text Extraction Pipeline
+**4-Tier Intelligent Fallback Architecture:**
+
+```
+1. Semantic HTML        → <article> tags
+2. Common Patterns      → .article-content, .post-content, [role="article"], etc.
+3. Density Heuristics   → score = paragraphs.length × textLength (finds content-rich nodes)
+4. Universal Fallback   → all <p> elements >50 characters
+```
+
+Semantic cleaning removes navigation, headers, footers, sidebars, and promotional content while preserving article structure. Works universally on Medium, Wikipedia, news sites, and any properly marked-up HTML.
+
+### AI Integration
+**Gemini 2.0-flash with prompt-engineered outputs:**
+- Character-aware processing (15,000 limit with live counter)
+- Markdown stripping post-processor (removes `**`, `__`, converts `*` → `-`)
+- Mode-specific prompts optimized for conciseness vs. detail
+- API key encryption via Chrome's native storage layer
+
+**ElevenLabs TTS with 10 voice profiles:**
+- Stability: 0.5, Similarity Boost: 0.75 for natural delivery
+- MP3 blob streaming with HTML5 player integration
+- Configurable voice selection persists across sessions
+
+### Audio Architecture
+**Manifest V3 Compliant Background Playback:**
+- Offscreen document handles persistent audio (survives popup close)
+- Service worker routes control messages to offscreen context
+- 30% default volume, seamless looping, instant sound switching
+- Expansion-ready for 5-sound library (meditation, nature, ocean, rain, white noise)
+
+### State Management & Reliability
+**Race-Condition Prevention:**
+- Promise-queue serialization for statistics updates (prevents concurrent write conflicts)
+- Dual storage strategy — local for speed, sync for persistence
+- Visited video tracking with Set-based deduplication (cross-session)
+- Storage-loaded flag gates initialization until state hydration completes
+
+**Graceful Degradation:**
+- Extension context invalidation detection with silent fallback
+- CORS error suppression for cross-origin videos (logs once, continues operation)
+- MutationObserver throttling prevents DOM thrashing on heavy SPAs
+- YouTube Shorts special-case routing (path-based ID extraction)
+
+---
+
+## Privacy & Security  
+
+- **Local-first processing** — all video frame analysis and text extraction happen in-browser
+- **User-initiated AI calls** — no automatic data transmission; Gemini/ElevenLabs requests only on explicit action
+- **Encrypted storage** — API keys stored via Chrome's secure storage APIs
+- **Zero telemetry** — no analytics, tracking pixels, or third-party cookies
+- **HTTPS-only** external requests with CSP compliance
+
+---
+
+## Accessibility Compliance  
+
+**WCAG 2.1 Adherence:**
+- Semantic HTML structure with proper landmark roles
+- Keyboard-navigable UI with visible focus indicators
+- High-contrast color scheme (4.5:1+ ratios)
+- Large touch targets (40px minimum)
+- Screen-reader compatible with ARIA labels
+- `prefers-reduced-motion` media query support (disables animations)
+
+---
+
+## Performance Metrics  
+
+**Video Analysis Optimizations:**
+- Frame sampling (every 3rd) + pixel sampling (every 4th) = 12x speedup
+- Canvas downscaling to 640×360 = 4x data reduction
+- Brightness pre-check gates luminance calculation = 2-3x conditional speedup
+- **Combined: 12-48x faster than naive per-frame, per-pixel RGB analysis**
+
+**Content Extraction:**
+- Early-exit strategy (stops at first viable match)
+- Cloned DOM manipulation (non-blocking, doesn't affect page)
+- Filtered selectors (specific → general for minimal DOM traversal)
+
+**Storage:**
+- Promise-queue batching for write coalescing
+- Local cache for hot-path reads (statistics dashboard)
+- Lazy offscreen document creation (only when audio enabled)
+
+---
+
+## Team  
+
+Built by:
+- [**Balachandra DS**](https://github.com/Baluds)
+- [**Athulya Anil**](https://github.com/atl-007)
+- [**Allen Joe Winny**](https://github.com/atl-007)
+
+Created for **HackUMass XIII (2025)**.  
+
+*Inspired by a simple belief — the internet should be safe and inclusive for everyone.*
+
+---
+
+## License  
+
+[MIT License](LICENSE)
+
+---
+
+## Links  
+
+- **Documentation:** [GitHub Repository](https://github.com/athulya-anil/halo)
+- **Issues & Support:** [GitHub Issues](https://github.com/athulya-anil/halo/issues)
+- **Gemini API:** [Get API Key](https://aistudio.google.com/)
+- **ElevenLabs API:** [Get API Key](https://elevenlabs.io/)
+- **WCAG Guidelines:** [W3C Accessibility](https://www.w3.org/WAI/WCAG21/quickref/)
