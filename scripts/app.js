@@ -8,7 +8,7 @@
 // ===================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadSettings();
+    // loadSettings();
     setupEventListeners();
     updateCharCount();
 
@@ -111,9 +111,7 @@ async function handleTextToSpeech() {
 }
 
 async function handleTextToSpeechmain(settings) {
-          const summaryText = document.getElementById('summaryText').textContent;
-
-
+    const summaryText = document.getElementById('summaryText').textContent;
     const elevenLabsApiKey = settings.elevenLabsApiKey;
     const voiceId = settings.voiceId || 'JBFqnCBsd6RMkjVDRZzb'; // Default to Rachel
     
@@ -261,8 +259,7 @@ async function generateSummary() {
   }
 
   // Check which provider is configured
-  chrome.storage.sync.get(['aiProvider', 'geminiApiKey', 'elevenLabsApiKey', 'voiceId'], async (data) => {
-    const provider = data.aiProvider || 'gemini';
+  chrome.storage.sync.get(['geminiApiKey', 'elevenLabsApiKey', 'voiceId'], async (data) => {
     const apiKey = data.geminiApiKey;
     
 
@@ -276,7 +273,7 @@ async function generateSummary() {
 
     try {
       // Call appropriate API to summarize
-      const summary = await summarizeText(textInput, type, apiKey, provider);
+      const summary = await summarizeText(textInput, type, apiKey);
       showSummary(summary);
     } catch (error) {
       showError('Error: ' + error.message);
@@ -284,41 +281,6 @@ async function generateSummary() {
   });
 }
 
-async function handleGenerate() {
-    const textInput = document.getElementById('textInput').value.trim();
-    const type = document.getElementById('summaryType').value;
-    
-    // Validation
-    if (!textInput) {
-        showError('Please paste some text to summarize.');
-        return;
-    }
-    
-    if (textInput.length < 100) {
-        showError('Please provide more text (at least 100 characters) for a meaningful summary.');
-        return;
-    }
-    
-    // Get settings
-    const settings = getSettings();
-    const provider = settings.aiProvider || 'gemini';
-    const apiKey =  settings.geminiApiKey ;
-    
-    if (!apiKey) {
-        showError(`Please configure your Gemini API key first. Click the Settings button at the top.`);
-        return;
-    }
-    
-    // Generate summary
-    showLoading();
-    
-    try {
-        const summary = await summarizeText(textInput, type, apiKey, provider);
-        showSummary(summary);
-    } catch (error) {
-        showError('Error: ' + error.message);
-    }
-}
 
 function handleClear() {
     document.getElementById('textInput').value = '';
@@ -384,19 +346,28 @@ function showError(message) {
 // ===================================
 
 function openSettingsModal() {
-    const settings = getSettings();
-    
-    // Load current settings
-    document.getElementById('aiProvider').value = settings.aiProvider || 'gemini';
-    document.getElementById('apiKeyInput').value = settings.geminiApiKey || '';
-    // document.getElementById('elevenLabsApiKeyInput').value = settings.elevenLabsApiKey || '';
-    // document.getElementById('voiceSelect').value = settings.voiceId || 'JBFqnCBsd6RMkjVDRZzb';
-    
-    // Show correct section
-    handleProviderChange();
-    
-    // Show modal
-    document.getElementById('settingsModal').classList.add('active');
+  // Load existing settings
+    chrome.storage.sync.get(['geminiApiKey', 'elevenLabsApiKey', 'voiceId'], (data) => {
+    // Set provider
+    const provider = data.aiProvider || 'gemini';
+    document.getElementById('aiProvider').value = provider;
+
+    // Trigger change event to show correct section
+    document.getElementById('aiProvider').dispatchEvent(new Event('change'));
+
+    // Load API keys
+    if (data.geminiApiKey) {
+      document.getElementById('apiKeyInput').value = data.geminiApiKey;
+    }
+    if (data.elevenLabsApiKey) {
+      document.getElementById('elevenLabsApiKeyInput').value = data.elevenLabsApiKey;
+    }
+    if (data.voiceId) {
+      document.getElementById('voiceSelect').value = data.voiceId || 'JBFqnCBsd6RMkjVDRZzb';
+    }
+  });
+  handleProviderChange();
+  document.getElementById('settingsModal').classList.add('active');
 }
 
 function closeSettingsModal() {
@@ -429,57 +400,37 @@ function handleSaveSettings() {
         return;
     }
     
-    
-    // Save to localStorage
-    const settings = {
+    chrome.storage.sync.set({
         aiProvider: provider,
         geminiApiKey: geminiKey,
         elevenLabsApiKey: elevenLabsKey,
         voiceId: voiceId
-    };
+    }, () => {
+        closeSettingsModal();
+        // Show success message
+        if (currentView === 'summarizer') {
+        document.getElementById('summaryError').style.background = '#d4edda';
+        document.getElementById('summaryError').style.borderColor = '#28a745';
+        document.getElementById('summaryError').style.color = '#155724';
+        errormsg = aiProvider === 'gemini' ? `✓ Gemini API key saved! You can now generate summaries.` : `✓ ElevenLabs API key saved! You can now use Text-to-Speech.`;
+        showError(errormsg);
+        setTimeout(() => {
+            document.getElementById('summaryError').style.display = 'none';
+            document.getElementById('summaryError').style.background = '#ffebee';
+            document.getElementById('summaryError').style.borderColor = '#ef5350';
+            document.getElementById('summaryError').style.color = '#c62828';
+        }, 3000);
+        }
+    });
     
-    localStorage.setItem('flashGuardianSettings', JSON.stringify(settings));
-    
-    closeSettingsModal();
-    
-    // Show success message
-    const successMsg = `✓ Gemini API key saved! You can now generate summaries.`;
-    document.getElementById('summaryError').style.background = '#d4edda';
-    document.getElementById('summaryError').style.borderColor = '#28a745';
-    document.getElementById('summaryError').style.color = '#155724';
-    showError(successMsg);
-    
-    setTimeout(() => {
-        document.getElementById('summaryError').style.display = 'none';
-        document.getElementById('summaryError').style.background = '';
-        document.getElementById('summaryError').style.borderColor = '';
-        document.getElementById('summaryError').style.color = '';
-    }, 3000);
 }
 
-// ===================================
-// LOCAL STORAGE FUNCTIONS
-// ===================================
-
-function getSettings() {
-    const settingsStr = localStorage.getItem('flashGuardianSettings');
-    return settingsStr ? JSON.parse(settingsStr) : {};
-}
-
-function loadSettings() {
-    const settings = getSettings();
-    
-    // Pre-populate if settings exist
-    if (settings.aiProvider) {
-        console.log('Settings loaded:', settings.aiProvider);
-    }
-}
 
 // ===================================
 // AI SUMMARIZATION
 // ===================================
 
-async function summarizeText(text, type, apiKey, provider = 'gemini') {
+async function summarizeText(text, type, apiKey) {
     const prompts = {
         quick: 'Summarize this article in 2-3 clear, concise sentences. Focus on the main point and key takeaway. DO NOT use markdown formatting like ** or bold. Just plain text:\n\n',
         bullets: 'Summarize this article as 3-5 KEY bullet points only. Focus on the most important takeaways. Keep each bullet point to ONE short sentence. Use simple hyphens (-) for bullets. DO NOT use sub-bullets or nested points. DO NOT use markdown. Be concise:\n\n'
@@ -489,11 +440,8 @@ async function summarizeText(text, type, apiKey, provider = 'gemini') {
     
     let summary;
     
-    if (provider === 'gemini') {
-        summary = await summarizeWithGemini(prompt, apiKey);
-    } else {
-        throw new Error('Unknown AI provider: ' + provider);
-    }
+    summary = await summarizeWithGemini(prompt, apiKey);
+
     
     // Clean up markdown formatting
     summary = cleanMarkdown(summary);

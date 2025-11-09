@@ -286,8 +286,7 @@ async function generateSummary(type) {
   }
 
   // Check which provider is configured
-  chrome.storage.sync.get(['aiProvider', 'geminiApiKey'], async (data) => {
-    const provider = data.aiProvider || 'gemini';
+  chrome.storage.sync.get(['geminiApiKey'], async (data) => {
     const apiKey = data.geminiApiKey ;
 
     if (!apiKey) {
@@ -300,7 +299,7 @@ async function generateSummary(type) {
 
     try {
       // Call appropriate API to summarize
-      const summary = await summarizeText(textInput, type, apiKey, provider);
+      const summary = await summarizeText(textInput, type, apiKey);
       showSummary(summary);
     } catch (error) {
       showError('Error: ' + error.message);
@@ -324,7 +323,7 @@ document.getElementById('aiProvider').addEventListener('change', (e) => {
 // Settings Modal Functions
 function openSettingsModal() {
   // Load existing settings
-    chrome.storage.sync.get(['aiProvider', 'geminiApiKey', 'elevenLabsApiKey', 'voiceId'], (data) => {
+    chrome.storage.sync.get(['geminiApiKey', 'elevenLabsApiKey', 'voiceId'], (data) => {
     // Set provider
     const provider = data.aiProvider || 'gemini';
     document.getElementById('aiProvider').value = provider;
@@ -365,6 +364,11 @@ document.getElementById('saveSettings').addEventListener('click', () => {
     return;
   }
 
+  if (provider === 'elevenlabs' && !elevenLabsKey) {
+    alert('Please enter an ElevenLabs API key');
+    return;
+  }
+
   // Save settings
   chrome.storage.sync.set({
     aiProvider: provider,
@@ -378,7 +382,8 @@ document.getElementById('saveSettings').addEventListener('click', () => {
       document.getElementById('summaryError').style.background = '#d4edda';
       document.getElementById('summaryError').style.borderColor = '#28a745';
       document.getElementById('summaryError').style.color = '#155724';
-      showError(`✓ Gemini API key saved! You can now generate summaries.`);
+      errormsg = aiProvider === 'gemini' ? `✓ Gemini API key saved! You can now generate summaries.` : `✓ ElevenLabs API key saved! You can now use Text-to-Speech.`;
+      showError(errormsg);
       setTimeout(() => {
         document.getElementById('summaryError').style.display = 'none';
         document.getElementById('summaryError').style.background = '#ffebee';
@@ -425,7 +430,7 @@ function showError(message) {
 }
 
 // Call AI API to summarize text (supports Gemini)
-async function summarizeText(text, type, apiKey, provider = 'gemini') {
+async function summarizeText(text, type, apiKey) {
   const prompts = {
     quick: 'Summarize this article in 2-3 clear, concise sentences. Focus on the main point and key takeaway. DO NOT use markdown formatting like ** or bold. Just plain text:\n\n',
     bullets: 'Summarize this article as 3-5 KEY bullet points only. Focus on the most important takeaways. Keep each bullet point to ONE short sentence. Use simple hyphens (-) for bullets. DO NOT use sub-bullets or nested points. DO NOT use markdown. Be concise:\n\n'
@@ -434,11 +439,7 @@ async function summarizeText(text, type, apiKey, provider = 'gemini') {
   const prompt = prompts[type] + text.substring(0, 15000); // Limit text length
 
   let summary;
-  if (provider === 'gemini') {
-    summary = await summarizeWithGemini(prompt, apiKey);
-  } else {
-    throw new Error('Unknown AI provider: ' + provider);
-  }
+  summary = await summarizeWithGemini(prompt, apiKey);
 
   // Clean up markdown formatting
   summary = cleanMarkdown(summary);
