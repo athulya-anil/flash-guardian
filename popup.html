@@ -13,10 +13,13 @@
 
     body {
       width: 400px;
+      min-width: 400px;
+      max-width: 400px;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       background: linear-gradient(135deg, #b8f50a 0%, #00d4ff 100%);
       color: #1a1a1a;
+      overflow-x: hidden;
     }
 
     .header {
@@ -57,12 +60,13 @@
       gap: 8px;
       align-items: flex-start;
       margin-top: 20px;
+      margin-left: -27px;
     }
 
     .icon-btn {
-      background: rgba(255, 255, 255, 0.8);
-      border: 2px solid rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
       width: 40px;
       height: 40px;
       cursor: pointer;
@@ -72,21 +76,22 @@
       justify-content: center;
       transition: all 0.3s ease;
       padding: 0;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
     }
 
     .icon-btn:hover {
       background: rgba(255, 255, 255, 1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
     }
 
     .icon-btn:active {
       background: rgba(240, 240, 240, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     }
 
     .icon-img {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       object-fit: contain;
     }
 
@@ -96,6 +101,8 @@
       padding-top: 12px;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
 
     .view-container.active {
@@ -220,11 +227,11 @@
     .status {
       background: linear-gradient(135deg, rgba(184, 245, 10, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%);
       border: 2px solid rgba(184, 245, 10, 0.4);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
       text-align: center;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     }
 
     .status.disabled {
@@ -281,7 +288,7 @@
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 14px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     }
 
     .setting-header {
@@ -350,10 +357,11 @@
 
     .stats {
       background: #fafafa;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 16px;
       margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     }
 
     .stats h3 {
@@ -382,12 +390,13 @@
 
     .info {
       background: #f5f5f5;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 14px;
       font-size: 14px;
       color: #000000;
       line-height: 1.6;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
     .info strong {
@@ -413,12 +422,42 @@
 
     #autoGenerateBtn:hover {
       background: linear-gradient(135deg, #a8e500 0%, #00c4ef 100%) !important;
-      box-shadow: 0 6px 16px rgba(184, 245, 10, 0.4) !important;
+      box-shadow: 0 6px 18px rgba(184, 245, 10, 0.45) !important;
     }
 
     #autoGenerateBtn:active {
       background: linear-gradient(135deg, #98d500 0%, #00b4df 100%) !important;
-      box-shadow: 0 2px 8px rgba(184, 245, 10, 0.3) !important;
+      box-shadow: 0 3px 10px rgba(184, 245, 10, 0.35) !important;
+    }
+
+    #generateBtn:hover {
+      background: #2a2a2a !important;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    #generateBtn:active {
+      background: #0a0a0a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    #clearBtn:hover {
+      background: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    #clearBtn:active {
+      background: #f5f5f5 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    #summaryType:hover {
+      border-color: #d0d0d0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    #textInput:focus {
+      border-color: #b8f50a;
+      box-shadow: 0 4px 12px rgba(184, 245, 10, 0.2);
     }
 
     #autoGenerateBtn:disabled {
@@ -469,9 +508,19 @@
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2) !important;
     }
 
+    #resetStats:hover {
+      background: #2a2a2a !important;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    #resetStats:active {
+      background: #0a0a0a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+
     #resetStats:focus,
     #resetStats:focus-visible {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
     }
 
 
@@ -497,11 +546,11 @@
         <p id="headerSubtitle" style="white-space: nowrap;">Photosensitive Content Protection</p>
       </div>
       <div class="header-icons">
-        <button id="musicBtn" class="icon-btn" title="White Noise" style="display: none;">
-          <img src="icons/musical-note.png" alt="Music" class="icon-img">
-        </button>
         <button id="settingsBtn" class="icon-btn" title="Settings" style="display: none;">
           <img src="icons/setting.png" alt="Settings" class="icon-img">
+        </button>
+        <button id="musicBtn" class="icon-btn" title="White Noise" style="display: none;">
+          <img src="icons/musical-note.png" alt="Music" class="icon-img">
         </button>
         <div style="display: flex; align-items: center; gap: 8px;">
           <span id="viewToggleHint" style="font-size: 12px; color: #666; font-weight: 500;">Summarizer</span>
@@ -509,6 +558,9 @@
             <img src="icons/notepad.png" alt="Notepad" class="icon-img">
           </button>
         </div>
+        <button id="rocketBtn" class="icon-btn" title="Open in Web App">
+          <img src="icons/shuttle.png" alt="Rocket" class="icon-img">
+        </button>
       </div>
     </div>
   </div>
@@ -559,7 +611,7 @@
     </div>
 
     <div style="text-align: center; margin-top: 15px;">
-      <button id="resetStats" style="background: #1a1a1a; color: #ffffff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
+      <button id="resetStats" style="background: #1a1a1a; color: #ffffff; border: none; padding: 13px 20px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); transition: all 0.3s ease;">
         Reset Statistics
       </button>
     </div>
@@ -568,21 +620,21 @@
   <!-- Text Summarizer View -->
   <div id="summarizerView" class="view-container">
     <div class="summarizer-content">
-      <textarea id="textInput" placeholder="Paste article text here..." style="width: 100%; min-height: 150px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; resize: vertical; box-sizing: border-box; margin-bottom: 10px; outline: none;"></textarea>
+      <textarea id="textInput" placeholder="Paste article text here..." style="width: 100%; min-height: 150px; padding: 14px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; resize: vertical; box-sizing: border-box; margin-bottom: 15px; outline: none; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); transition: all 0.3s ease;"></textarea>
 
-      <button id="autoGenerateBtn" style="width: 100%; background: linear-gradient(135deg, #b8f50a 0%, #00d4ff 100%); color: #1a1a1a; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(184, 245, 10, 0.3); margin-bottom: 15px; transition: all 0.3s ease;">
+      <button id="autoGenerateBtn" style="width: 100%; background: linear-gradient(135deg, #b8f50a 0%, #00d4ff 100%); color: #1a1a1a; border: none; padding: 15px 20px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; box-shadow: 0 4px 14px rgba(184, 245, 10, 0.35); margin-bottom: 15px; transition: all 0.3s ease;">
         Auto-Fill from Page
       </button>
 
-      <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
-        <select id="summaryType" style="flex: 1; padding: 14px 12px; padding-right: 36px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: #fff; cursor: pointer; height: 48px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%278%27 viewBox=%270 0 12 8%27%3e%3cpath fill=%27%23666%27 d=%27M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z%27/%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 12px center;">
+      <div style="display: flex; gap: 8px; margin-bottom: 15px; align-items: stretch; max-width: 100%; box-sizing: border-box;">
+        <select id="summaryType" style="flex: 1; min-width: 0; padding: 12px 10px; padding-right: 30px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 13px; background: #fff; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%278%27 viewBox=%270 0 12 8%27%3e%3cpath fill=%27%23666%27 d=%27M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z%27/%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 10px center; font-weight: 600; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; box-sizing: border-box;">
           <option value="quick">Quick Summary</option>
           <option value="bullets">Bullet Points</option>
         </select>
-        <button id="generateBtn" style="flex: 1; background: #1a1a1a; color: #ffffff; border: none; padding: 14px 20px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; outline: none;">
+        <button id="generateBtn" style="flex: 1; min-width: 0; background: #1a1a1a; color: #ffffff; border: none; padding: 12px 14px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); transition: all 0.3s ease; outline: none; box-sizing: border-box;">
           Summarize
         </button>
-        <button id="clearBtn" style="flex: 0 0 auto; background: rgba(255, 255, 255, 0.9); color: #4a4a4a; border: 2px solid rgba(0, 0, 0, 0.1); padding: 14px 20px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 600; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease;">
+        <button id="clearBtn" style="flex: 0 0 auto; background: rgba(255, 255, 255, 0.95); color: #4a4a4a; border: 2px solid rgba(0, 0, 0, 0.1); padding: 12px 16px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 600; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; white-space: nowrap; box-sizing: border-box;">
           Clear
         </button>
       </div>
@@ -591,13 +643,8 @@
         <strong>⏳ Generating summary...</strong><br>
         Processing your text with AI
       </div>
-      <div>
-        <button id="openWebAppBtn" style="background: rgba(255, 255, 255, 0.9); color: #4a4a4a; border: 2px solid rgba(0, 0, 0, 0.1); padding: 14px 20px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 600; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease;">
-        Open
-        </button>
-      </div>
 
-      <div id="summaryResult" class="stats" style="display: none;">
+      <div id="summaryResult" class="stats" style="display: none; box-shadow: 0 0 25px rgba(184, 245, 10, 0.5), 0 0 50px rgba(0, 212, 255, 0.25), 0 4px 20px rgba(0, 0, 0, 0.1); border: 2px solid rgba(184, 245, 10, 0.4); background: linear-gradient(135deg, rgba(184, 245, 10, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);">
         <h3 style="margin: 0 0 12px 0;">Summary</h3>
         <div id="summaryText" style="font-size: 14px; line-height: 1.6; color: #000000; white-space: pre-wrap;"></div>
       </div>
@@ -605,12 +652,7 @@
       <div id="summaryError" class="info" style="display: none; background: #ffebee; border-color: #ef5350; color: #c62828; white-space: pre-wrap;">
       </div>
 
-      <div id="summaryResult" class="stats" style="display: none; box-shadow: 0 0 20px rgba(184, 245, 10, 0.4), 0 0 40px rgba(0, 212, 255, 0.2); border: 2px solid rgba(184, 245, 10, 0.3);">
-        <h3 style="margin: 0 0 12px 0;">Summary</h3>
-        <div id="summaryText" style="font-size: 14px; line-height: 1.6; color: #000000; white-space: pre-wrap;"></div>
-      </div>
-
-      <div id="audioSection" class="setting-item" style="margin-bottom: 15px; display: none;">
+      <div id="audioSection" class="setting-item" style="margin-bottom: 15px; margin-top: 20px; display: none;">
         <div class="setting-header">
           <label>Enable White Noise</label>
           <label class="toggle">
@@ -621,6 +663,10 @@
         <div style="margin-top: 10px;">
           <select id="soundType" style="width: 100%; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: #fff; cursor: pointer;">
             <option value="meditation">Meditation Music</option>
+            <option value="forest">Forest Sounds</option>
+            <option value="motor">Motor Music</option>
+            <option value="rain">Rain Music</option>
+            <option value="ocean">Ocean</option>
           </select>
         </div>
         <p style="margin-top: 8px;">Play calming background audio while reading</p>

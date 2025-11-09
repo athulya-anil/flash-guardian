@@ -9,8 +9,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #333;
+    background: linear-gradient(135deg, #b8f50a 0%, #00d4ff 100%);
+    color: #1a1a1a;
     line-height: 1.6;
     min-height: 100vh;
 }
@@ -25,8 +25,9 @@ body {
    HEADER
    =================================== */
 .header {
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    background: #000000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     padding: 20px 0;
     position: sticky;
     top: 0;
@@ -39,32 +40,47 @@ body {
     align-items: center;
 }
 
-.logo h1 {
-    font-size: 28px;
-    color: #667eea;
-    margin-bottom: 5px;
+.logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo-img {
+    height: 80px;
 }
 
 .tagline {
-    font-size: 14px;
-    color: #666;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
 }
 
 .settings-btn {
-    background: #667eea;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1a1a1a;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 20px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 600;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-icon {
+    width: 20px;
+    height: 20px;
 }
 
 .settings-btn:hover {
-    background: #764ba2;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* ===================================
@@ -75,34 +91,37 @@ body {
 }
 
 .instructions {
-    background: white;
-    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
 }
 
 .instructions h2 {
-    color: #667eea;
-    margin-bottom: 15px;
-    font-size: 24px;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-weight: 700;
 }
 
 .instructions p {
-    color: #555;
+    color: #4a4a4a;
     font-size: 16px;
-    line-height: 1.8;
+    line-height: 1.6;
 }
 
 /* ===================================
    INPUT SECTION
    =================================== */
 .input-section {
-    background: white;
-    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
 }
 
 .section-label {
@@ -111,31 +130,33 @@ body {
     align-items: center;
     font-size: 18px;
     font-weight: 600;
-    color: #333;
-    margin-bottom: 15px;
+    color: #1a1a1a;
+    margin-bottom: 12px;
 }
 
 .char-count {
-    font-size: 14px;
-    color: #999;
-    font-weight: normal;
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
 }
 
 #textInput {
     width: 100%;
-    padding: 20px;
+    padding: 14px;
     border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 16px;
+    border-radius: 12px;
+    font-size: 15px;
     font-family: inherit;
     resize: vertical;
     min-height: 300px;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 #textInput:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #b8f50a;
+    box-shadow: 0 4px 12px rgba(184, 245, 10, 0.2);
 }
 
 #textInput::placeholder {
@@ -146,11 +167,12 @@ body {
    CONTROLS
    =================================== */
 .controls {
-    background: white;
-    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -166,76 +188,99 @@ body {
 
 .summary-type-selector label {
     font-weight: 600;
-    color: #333;
+    color: #1a1a1a;
+    font-size: 16px;
 }
 
 #summaryType {
-    padding: 12px 20px;
+    padding: 13px 40px 13px 16px;
     border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
     background: white;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    min-width: 280px;
+}
+
+#summaryType:hover {
+    border-color: #d0d0d0;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 #summaryType:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #b8f50a;
 }
 
 .button-group {
     display: flex;
-    gap: 15px;
+    gap: 12px;
 }
 
 .btn {
-    padding: 14px 32px;
+    padding: 14px 28px;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .btn-primary {
-    background: #667eea;
-    color: white;
+    background: #1a1a1a;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .btn-primary:hover {
-    background: #764ba2;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    background: #2a2a2a;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:active {
+    background: #0a0a0a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary {
-    background: #f5f5f5;
-    color: #333;
+    background: rgba(255, 255, 255, 0.95);
+    color: #4a4a4a;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .btn-secondary:hover {
-    background: #e0e0e0;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary:active {
+    background: #f5f5f5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* ===================================
    LOADING, ERROR, RESULT
    =================================== */
 .loading-state {
-    background: white;
-    padding: 60px 30px;
+    background: linear-gradient(135deg, rgba(184, 245, 10, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%);
+    border: 2px solid rgba(184, 245, 10, 0.4);
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 40px 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .spinner {
     width: 50px;
     height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #667eea;
+    border: 5px solid rgba(184, 245, 10, 0.2);
+    border-top: 5px solid #b8f50a;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto 20px;
@@ -247,26 +292,30 @@ body {
 }
 
 .loading-state p {
-    color: #666;
-    font-size: 18px;
+    color: #1a1a1a;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .error-message {
     background: #ffebee;
     border: 2px solid #ef5350;
     color: #c62828;
-    padding: 20px 30px;
+    padding: 14px 24px;
     border-radius: 12px;
-    margin-bottom: 30px;
-    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 .summary-result {
-    background: white;
-    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
 }
 
 .result-header {
@@ -274,74 +323,93 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .result-header h3 {
-    color: #667eea;
-    font-size: 22px;
+    color: #1a1a1a;
+    font-size: 18px;
+    font-weight: 600;
+    flex: 1;
 }
 
-.btn-copy {
-    background: #667eea;
+.btn-copy,
+.btn-download,
+.btn-tts {
+    background: #1a1a1a;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
-.btn-copy:hover {
-    background: #764ba2;
+.btn-copy:hover,
+.btn-download:hover,
+.btn-tts:hover {
+    background: #2a2a2a;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .summary-text {
-    font-size: 18px;
-    line-height: 1.8;
-    color: #333;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1a1a1a;
     white-space: pre-wrap;
+    font-weight: 400;
 }
 
 /* ===================================
    FEATURES SECTION
    =================================== */
 .features {
-    background: white;
-    padding: 40px 30px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 32px 24px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
 }
 
 .features h2 {
-    color: #667eea;
+    color: #1a1a1a;
     text-align: center;
-    margin-bottom: 40px;
-    font-size: 28px;
+    margin-bottom: 32px;
+    font-size: 26px;
+    font-weight: 700;
 }
 
 .feature-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    gap: 24px;
 }
 
 .feature-card {
     text-align: center;
     padding: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
 }
 
 .feature-icon {
     font-size: 48px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .feature-card h3 {
-    color: #333;
-    margin-bottom: 10px;
-    font-size: 20px;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-size: 19px;
+    font-weight: 600;
 }
 
 .feature-card p {
-    color: #666;
+    color: #4a4a4a;
     font-size: 15px;
     line-height: 1.6;
 }
@@ -356,7 +424,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1000;
     backdrop-filter: blur(5px);
 }
@@ -369,9 +437,9 @@ body {
 
 .modal-content {
     background: white;
-    border-radius: 16px;
+    border-radius: 12px;
     width: 90%;
-    max-width: 600px;
+    max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -386,21 +454,26 @@ body {
 }
 
 .modal-header h2 {
-    color: #667eea;
-    font-size: 24px;
+    color: #1a1a1a;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .close-btn {
     background: none;
     border: none;
-    font-size: 28px;
+    font-size: 24px;
     cursor: pointer;
-    color: #999;
+    color: #666;
     transition: color 0.3s ease;
+    line-height: 1;
 }
 
 .close-btn:hover {
-    color: #333;
+    color: #1a1a1a;
 }
 
 .modal-body {
@@ -408,22 +481,24 @@ body {
 }
 
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
     font-weight: 600;
-    color: #333;
-    margin-bottom: 10px;
-    font-size: 16px;
+    color: #000000;
+    margin-bottom: 8px;
+    font-size: 14px;
 }
 
 .help-link {
-    color: #667eea;
+    color: #1a73e8;
     text-decoration: none;
     font-size: 14px;
-    margin-left: 10px;
+    margin-left: 0;
+    display: inline-block;
+    margin-top: 4px;
 }
 
 .help-link:hover {
@@ -433,23 +508,25 @@ body {
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 14px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #faee21;
 }
 
 .help-text {
     font-size: 13px;
     color: #999;
     margin-top: 8px;
+    line-height: 1.5;
 }
 
 .modal-footer {
@@ -457,28 +534,69 @@ body {
     border-top: 2px solid #f0f0f0;
     display: flex;
     justify-content: flex-end;
-    gap: 15px;
+    gap: 10px;
+}
+
+.modal-footer .btn-cancel {
+    background: #ffffff;
+    color: #000000;
+    border: 2px solid #e0e0e0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.modal-footer .btn-cancel:hover {
+    background: #fafafa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border-color: #d0d0d0;
+}
+
+.modal-footer .btn-save {
+    background: linear-gradient(135deg, #b8f50a 0%, #00d4ff 100%);
+    color: #1a1a1a;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(184, 245, 10, 0.3);
+    transition: all 0.3s ease;
+}
+
+.modal-footer .btn-save:hover {
+    background: linear-gradient(135deg, #a8e500 0%, #00c4ef 100%);
+    box-shadow: 0 4px 12px rgba(184, 245, 10, 0.4);
 }
 
 /* ===================================
    FOOTER
    =================================== */
 .footer {
-    background: rgba(255, 255, 255, 0.98);
-    padding: 30px 0;
+    background: #000000;
+    backdrop-filter: blur(10px);
+    padding: 24px 0;
     text-align: center;
-    margin-top: 40px;
+    margin-top: 32px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .footer p {
-    color: #666;
-    font-size: 14px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .footer-note {
-    margin-top: 10px;
+    margin-top: 8px;
     font-style: italic;
-    color: #999;
+    color: #e0e0e0;
+    font-size: 12px;
 }
 
 /* ===================================
@@ -518,59 +636,20 @@ body {
     gap: 10px;
 }
 
-.btn-download {
-    background: #4caf50;
-    color: white;
-    padding: 10px 20px;
-}
-
-.btn-download:hover {
-    background: #45a049;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-}
-
-/* Make buttons responsive in result header */
-@media (max-width: 768px) {
-    .button-group-result {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .btn-copy,
-    .btn-download {
-        width: 100%;
-    }
-}
-
-/* Add these styles to your existing CSS */
-
-/* TTS Button */
-.btn-tts {
-    background: #ff6b6b;
-    color: white;
-    padding: 10px 20px;
-}
-
-.btn-tts:hover {
-    background: #ff5252;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
-}
-
 .btn-tts:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    transform: none;
+    background: #bdbdbd !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
 }
 
 /* Audio Player */
 .audio-player {
-    margin: 20px 0;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
     border: 2px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .audio-player audio {
@@ -580,7 +659,7 @@ body {
 
 /* Loading state for TTS */
 .btn-tts.loading {
-    background: #999;
+    background: #666 !important;
     position: relative;
 }
 
@@ -596,10 +675,10 @@ body {
     border: 2px solid #fff;
     border-radius: 50%;
     border-top-color: transparent;
-    animation: spin 0.6s linear infinite;
+    animation: spin-tts 0.6s linear infinite;
 }
 
-@keyframes spin {
+@keyframes spin-tts {
     to { transform: rotate(360deg); }
 }
 
@@ -609,7 +688,7 @@ body {
         flex-direction: column;
         width: 100%;
     }
-    
+
     .btn-copy,
     .btn-download,
     .btn-tts {

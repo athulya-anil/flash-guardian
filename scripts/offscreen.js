@@ -12,9 +12,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'startAudio') {
     const soundFile = request.soundFile;
     try {
-      // Stop any existing audio
+      // Stop any existing audio gracefully
       if (audioElement) {
         audioElement.pause();
+        audioElement.src = '';
         audioElement = null;
       }
 
@@ -23,13 +24,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       audioElement.loop = true;
       audioElement.volume = 0.3;
 
-      audioElement.play().then(() => {
-        console.log('[Halo Offscreen] Audio started:', soundFile);
+      // Play audio with better error handling
+      const playPromise = audioElement.play();
+
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          console.log('[Halo Offscreen] Audio started:', soundFile);
+          sendResponse({ success: true });
+        }).catch((error) => {
+          // Ignore "interrupted" errors as they're harmless
+          if (error.name === 'AbortError') {
+            console.log('[Halo Offscreen] Audio play was interrupted (harmless)');
+            sendResponse({ success: true });
+          } else {
+            console.error('[Halo Offscreen] Error playing audio:', error);
+            sendResponse({ success: false, error: error.message });
+          }
+        });
+      } else {
         sendResponse({ success: true });
-      }).catch((error) => {
-        console.error('[Halo Offscreen] Error playing audio:', error);
-        sendResponse({ success: false, error: error.message });
-      });
+      }
     } catch (error) {
       console.error('[Halo Offscreen] Error creating audio:', error);
       sendResponse({ success: false, error: error.message });
@@ -42,6 +56,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (audioElement) {
         audioElement.pause();
         audioElement.currentTime = 0;
+        audioElement.src = '';
         audioElement = null;
         console.log('[Halo Offscreen] Audio stopped');
       }

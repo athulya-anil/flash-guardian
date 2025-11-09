@@ -12,11 +12,12 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <h1>⚡ Flash Guardian</h1>
-                    <p class="tagline">AI-Powered Text Summarizer for Accessibility</p>
+                    <img src="icons/white_logo.png" alt="Halo" class="logo-img">
+                    <p class="tagline">AI-Powered Text Summarizer</p>
                 </div>
                 <button id="settingsBtn" class="settings-btn" title="Settings">
-                    ⚙️ Settings
+                    <img src="icons/setting.png" alt="Settings" class="settings-icon">
+                    Settings
                 </button>
             </div>
         </div>
@@ -27,18 +28,18 @@
         <div class="container">
             <!-- Instructions -->
             <div class="instructions">
-                <h2>📝 How to Use</h2>
+                <h2>How to Use</h2>
                 <p>Paste or type any article, blog post, or long text below. Our AI will create a clear, easy-to-read summary perfect for people with ADHD, reading difficulties, or anyone who wants to save time.</p>
             </div>
 
             <!-- Input Section -->
             <div class="input-section">
                 <label for="textInput" class="section-label">
-                    Your Text
+                    Input Text
                     <span class="char-count" id="charCount">0 characters</span>
                 </label>
-                <textarea 
-                    id="textInput" 
+                <textarea
+                    id="textInput"
                     placeholder="Paste your article, blog post, or any long text here..."
                     rows="15"
                 ></textarea>
@@ -55,10 +56,10 @@
                 </div>
                 <div class="button-group">
                     <button id="generateBtn" class="btn btn-primary">
-                        ✨ Generate Summary
+                        Generate Summary
                     </button>
                     <button id="clearBtn" class="btn btn-secondary">
-                        🗑️ Clear All
+                        Clear All
                     </button>
                 </div>
             </div>
@@ -75,22 +76,22 @@
             <!-- Summary Result -->
             <div id="summaryResult" class="summary-result" style="display: none;">
                 <div class="result-header">
-                    <h3>📄 Your Summary</h3>
-                    <button id="copySummary" class="btn btn-copy">📋 Copy</button>
-                    <button id="downloadSummary" class="btn btn-download">💾 Download</button>
-                    <button id="ttsBtn" class="btn btn-tts">🔊 Listen</button>
+                    <h3>Summary</h3>
+                    <button id="copySummary" class="btn btn-copy">Copy</button>
+                    <button id="downloadSummary" class="btn btn-download">Download</button>
+                    <button id="ttsBtn" class="btn btn-tts">Listen</button>
                 </div>
 
                 <div id="audioPlayer" class="audio-player" style="display: none;">
                 <audio id="summaryAudio" controls></audio>
                 </div>
-                
+
                 <div id="summaryText" class="summary-text"></div>
             </div>
 
             <!-- Features Section -->
             <div class="features">
-                <h2>✨ Features</h2>
+                <h2>Features</h2>
                 <div class="feature-grid">
                     <div class="feature-card">
                         <div class="feature-icon">🧠</div>
@@ -121,7 +122,7 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>⚙️ Settings</h2>
+                <h2><img src="icons/setting.png" alt="Settings" style="width: 24px; height: 24px; vertical-align: middle;">Settings</h2>
                 <button id="closeModal" class="close-btn">✕</button>
             </div>
             <div class="modal-body">
@@ -129,23 +130,20 @@
                 <div class="form-group">
                     <label for="aiProvider">AI Provider</label>
                     <select id="aiProvider">
-                        <option value="gemini">Google Gemini</option>
+                        <option value="gemini">Google Gemini (Recommended)</option>
                         <option value="elevenlabs">ElevenLabs (Text-to-Speech)</option>
                     </select>
                 </div>
 
                 <!-- Gemini API Key -->
                 <div id="geminiKeySection" class="form-group">
-                    <label for="apiKeyInput">
-                        Gemini API Key
-                        <a href="https://aistudio.google.com/app/apikey" target="_blank" class="help-link">Get API Key →</a>
-                    </label>
-                    <input 
-                        type="password" 
-                        id="apiKeyInput" 
+                    <label for="apiKeyInput">Gemini API Key</label>
+                    <input
+                        type="password"
+                        id="apiKeyInput"
                         placeholder="Enter your Gemini API key"
                     />
-                    <p class="help-text">Free tier available. Your key is stored locally in your browser.</p>
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" class="help-link">Get your free API key at: Google AI Studio</a>
                 </div>
 
                 <div id="elevenLabsKeySection" style="display: none;">
@@ -181,8 +179,8 @@
 
             </div>
             <div class="modal-footer">
-                <button id="cancelSettings" class="btn btn-secondary">Cancel</button>
-                <button id="saveSettings" class="btn btn-primary">Save Settings</button>
+                <button id="cancelSettings" class="btn-cancel">Cancel</button>
+                <button id="saveSettings" class="btn-save">Save</button>
             </div>
         </div>
     </div>
@@ -190,8 +188,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>Made with ❤️ for accessibility | Flash Guardian © 2025</p>
-            <p class="footer-note">This tool helps people with ADHD, reading difficulties, and anyone who wants clearer information.</p>
+            <p>Made with 🤍 by Allen, Bala, Athulya | Flash Guardian © 2025</p>
         </div>
     </footer>
 

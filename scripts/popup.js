@@ -15,11 +15,11 @@ let currentSoundType = 'meditation';
 
 // Map sound types to file paths
 const soundFiles = {
-  'meditation': 'sounds/Short Meditation Music - 3 Minute Relaxation, Calming.mp3'
-  // Add more sounds here as you download them:
-  // 'rain': 'sounds/rain.mp3',
-  // 'ocean': 'sounds/ocean.mp3',
-  // 'white': 'sounds/white-noise.mp3',
+  'meditation': 'sounds/short-meditation-music.mp3',
+  'forest': 'sounds/forest-ambience.mp3',
+  'motor': 'sounds/motor-soothing.mp3',
+  'rain': 'sounds/calming-rain.mp3',
+  'ocean': 'sounds/soothing-ocean-waves.mp3',
 };
 
 // Initialize audio toggle from storage
@@ -183,6 +183,22 @@ document.getElementById('musicBtn').addEventListener('click', () => {
     } else {
       audioSection.style.display = 'none';
     }
+  }
+});
+
+// Rocket button - opens web app
+document.getElementById('rocketBtn').addEventListener('click', () => {
+  const textInput = document.getElementById('textInput').value.trim();
+  const type = document.getElementById('summaryType').value;
+
+  // If there's text, pass it to the web app via URL parameters
+  if (textInput) {
+    const encodedText = encodeURIComponent(textInput);
+    const url = `app.html?text=${encodedText}&type=${type}`;
+    chrome.tabs.create({ url: chrome.runtime.getURL(url) });
+  } else {
+    // If no text, just open the web app
+    chrome.tabs.create({ url: chrome.runtime.getURL('app.html') });
   }
 });
 
@@ -623,20 +639,3 @@ async function summarizeWithGemini(prompt, apiKey) {
   const data = await response.json();
   return data.candidates[0].content.parts[0].text;
 }
-
-
-// Open in Web App button - redirect to companion website
-document.getElementById('openWebAppBtn').addEventListener('click', () => {
-    const textInput = document.getElementById('textInput').value.trim();
-    const type = document.getElementById('summaryType').value;
-    
-    // If there's text, pass it to the web app via URL parameters
-    if (textInput) {
-        const encodedText = encodeURIComponent(textInput);
-        const url = `app.html?text=${encodedText}&type=${type}`;
-        chrome.tabs.create({ url: chrome.runtime.getURL(url) });
-    } else {
-        // If no text, just open the web app
-        chrome.tabs.create({ url: chrome.runtime.getURL('app.html') });
-    }
-});
