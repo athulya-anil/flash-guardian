@@ -118,7 +118,7 @@ The extension monitors videos using these steps:
 2. Click the ⚙️ settings icon at the top
 3. Choose your AI provider:
    - **Google Gemini** (Recommended): Fast, high-quality summaries
-     - Get free API key: [Google AI Studio](https://aistudio.google.com/app/apikey)
+     - Get free API key: [Google AI Studio](https://aistudio.google.com)
 4. Paste your API key and click "Save"
 
 **Using the Summarizer:**
