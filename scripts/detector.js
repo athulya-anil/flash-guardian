@@ -393,17 +393,25 @@ class FlashDetector {
    * Get video identifier from URL (for YouTube)
    */
   function getVideoId() {
-    // For YouTube, extract video ID from URL
+    // Check if we're on a Shorts page
+    if (window.location.pathname.includes('/shorts/')) {
+      // Extract the shorts ID from the URL path
+      const shortsMatch = window.location.pathname.match(/\/shorts\/([^/?]+)/);
+      if (shortsMatch && shortsMatch[1]) {
+        return shortsMatch[1];
+      }
+    }
+
+    // For regular YouTube videos, extract video ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get('v');
 
-    // Only return a valid video ID if we're on a watch page
-    // Don't count preview videos on homepage or other pages
+    // Return video ID for watch pages
     if (videoId && window.location.pathname.includes('/watch')) {
       return videoId;
     }
 
-    // Return null for non-watch pages (homepage, search, etc.)
+    // Return null for non-watch/non-shorts pages
     return null;
   }
 
@@ -429,9 +437,9 @@ class FlashDetector {
     // For YouTube, use the video ID from URL instead of video src
     const videoId = getVideoId();
 
-    // Don't process videos on non-watch pages (homepage, search, etc.)
+    // Don't process videos on non-watch/non-shorts pages (homepage, search, etc.)
     if (!videoId) {
-      console.log('[Halo] Not on a watch page, skipping video initialization');
+      console.log('[Halo] Not on a watch or shorts page, skipping video initialization');
       return;
     }
 
