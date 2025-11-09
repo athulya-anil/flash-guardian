@@ -610,7 +610,6 @@
         <label for="aiProvider" style="display: block; margin-bottom: 8px;">AI Provider</label>
         <select id="aiProvider" style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; margin-bottom: 15px;">
           <option value="gemini">Google Gemini (Recommended)</option>
-          <option value="groq">Groq (Free Alternative)</option>
           <option value="elevenlabs">ElevenLabs (Text-to-Speech)</option>
         </select>
 
@@ -622,18 +621,9 @@
           </div>
         </div>
 
-        <div id="groqKeySection" style="display: none;">
-          <label for="groqApiKeyInput">Groq API Key</label>
-          <input type="password" id="groqApiKeyInput" placeholder="Enter your Groq API key">
-          <div class="modal-info">
-            Get your free API key at: <a href="https://console.groq.com/keys" target="_blank">Groq Console</a>
-            <br>Free tier: 30 requests/min, very fast responses
-          </div>
-        </div>
-
         <div id="elevenLabsKeySection" style="display: none;">
           
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 15px;">
         <label for="elevenLabsApiKeyInput">
             ElevenLabs API Key (Optional - for Text-to-Speech)
             <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" class="help-link">Get API Key →</a>
@@ -643,12 +633,11 @@
             id="elevenLabsApiKeyInput" 
             placeholder="Enter your ElevenLabs API key"
         />
-        <p class="help-text">Optional. Enables Text-to-Speech feature to listen to your summaries. From <a href="https://elevenlabs.io" target="_blank">ElevenLabs</a>.</p>
     </div>
 
     <div class="form-group">
         <label for="voiceSelect">Text-to-Speech Voice</label>
-        <select id="voiceSelect">
+        <select id="voiceSelect" style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; margin-bottom: 15px;" >
             <option value="JBFqnCBsd6RMkjVDRZzb">Rachel (Female, American)</option>
             <option value="21m00Tcm4TlvDq8ikWAM">Daniel (Male, British)</option>
             <option value="AZnzlk1XvdvUeBnXmlld">Domi (Female, American)</option>
@@ -660,7 +649,6 @@
             <option value="pNInz6obpgDQGcFmaJgB">Adam (Male, American)</option>
             <option value="yoZ06aMxZJJ28mfd3POQ">Sam (Male, American)</option>
         </select>
-        <p class="help-text">Select the voice for reading your summaries aloud.</p>
     </div>
     </div>
     

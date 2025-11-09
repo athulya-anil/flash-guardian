@@ -100,7 +100,7 @@
                     <div class="feature-card">
                         <div class="feature-icon">⚡</div>
                         <h3>Fast & Accurate</h3>
-                        <p>Powered by advanced AI (Gemini or Groq) for reliable summaries in seconds.</p>
+                        <p>Powered by advanced AI Gemini  for reliable summaries in seconds.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">♿</div>
@@ -130,7 +130,7 @@
                     <label for="aiProvider">AI Provider</label>
                     <select id="aiProvider">
                         <option value="gemini">Google Gemini</option>
-                        <option value="groq">Groq</option>
+                        <option value="elevenlabs">ElevenLabs (Text-to-Speech)</option>
                     </select>
                 </div>
 
@@ -148,19 +148,37 @@
                     <p class="help-text">Free tier available. Your key is stored locally in your browser.</p>
                 </div>
 
-                <!-- Groq API Key -->
-                <div id="groqKeySection" class="form-group" style="display: none;">
-                    <label for="groqApiKeyInput">
-                        Groq API Key
-                        <a href="https://console.groq.com/keys" target="_blank" class="help-link">Get API Key →</a>
-                    </label>
-                    <input 
-                        type="password" 
-                        id="groqApiKeyInput" 
-                        placeholder="Enter your Groq API key"
-                    />
-                    <p class="help-text">Fast and free. Your key is stored locally in your browser.</p>
-                </div>
+                <div id="elevenLabsKeySection" style="display: none;">
+          
+        <div class="form-group" style="margin-bottom: 15px;">
+        <label for="elevenLabsApiKeyInput">
+            ElevenLabs API Key (Optional - for Text-to-Speech)
+            <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" class="help-link">Get API Key →</a>
+        </label>
+        <input 
+            type="password" 
+            id="elevenLabsApiKeyInput" 
+            placeholder="Enter your ElevenLabs API key"
+        />
+    </div>
+
+    <div class="form-group">
+        <label for="voiceSelect">Text-to-Speech Voice</label>
+        <select id="voiceSelect" >
+            <option value="JBFqnCBsd6RMkjVDRZzb">Rachel (Female, American)</option>
+            <option value="21m00Tcm4TlvDq8ikWAM">Daniel (Male, British)</option>
+            <option value="AZnzlk1XvdvUeBnXmlld">Domi (Female, American)</option>
+            <option value="EXAVITQu4vr4xnSDxMaL">Bella (Female, American)</option>
+            <option value="ErXwobaYiN019PkySvjV">Antoni (Male, American)</option>
+            <option value="MF3mGyEYCl7XYWbV9V6O">Elli (Female, American)</option>
+            <option value="TxGEqnHWrfWFTfGW9XjX">Josh (Male, American)</option>
+            <option value="VR6AewLTigWG4xSOukaG">Arnold (Male, American)</option>
+            <option value="pNInz6obpgDQGcFmaJgB">Adam (Male, American)</option>
+            <option value="yoZ06aMxZJJ28mfd3POQ">Sam (Male, American)</option>
+        </select>
+    </div>
+    </div>
+
             </div>
             <div class="modal-footer">
                 <button id="cancelSettings" class="btn btn-secondary">Cancel</button>
