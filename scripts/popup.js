@@ -15,11 +15,11 @@ let currentSoundType = 'meditation';
 
 // Map sound types to file paths
 const soundFiles = {
-  'meditation': 'sounds/Short Meditation Music - 3 Minute Relaxation, Calming.mp3'
-  // Add more sounds here as you download them:
-  // 'rain': 'sounds/rain.mp3',
-  // 'ocean': 'sounds/ocean.mp3',
-  // 'white': 'sounds/white-noise.mp3',
+  'meditation': 'sounds/short-meditation-music.mp3',
+  'forest': 'sounds/forest-ambience.mp3',
+  'motor': 'sounds/motor-soothing.mp3',
+  'rain': 'sounds/calming-rain.mp3',
+  'ocean': 'sounds/soothing-ocean-waves.mp3',
 };
 
 // Initialize audio toggle from storage
