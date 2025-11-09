@@ -313,10 +313,7 @@ async function generateSummary() {
     // Show loading state
     showLoading();
 
-    const ttsBtn = document.getElementById('ttsBtn');
-    const originalText = ttsBtn.textContent;
-    ttsBtn.textContent = '🔊 Listen';
-    document.getElementById('audioPlayer').style.display = 'none';
+    closeAudio();
 
     try {
       // Call appropriate API to summarize
@@ -326,6 +323,14 @@ async function generateSummary() {
       showError('Error: ' + error.message);
     }
   });
+}
+
+async function closeAudio() {
+    const ttsBtn = document.getElementById('ttsBtn');
+    ttsBtn.textContent = '🔊 Listen';
+    document.getElementById('audioPlayer').style.display = 'none';
+    const audio = document.getElementById('summaryAudio');
+    audio.pause();
 }
 
 async function summarizeText(text, type, apiKey) {
@@ -483,15 +488,11 @@ function handleSaveSettings() {
         elevenLabsApiKey: elevenLabsKey,
         voiceId: voiceId
     }, () => {
-        
-        const ttsBtn = document.getElementById('ttsBtn');
-        const originalText = ttsBtn.textContent;
-    
-        ttsBtn.textContent = '🔊 Listen';
 
+        closeAudio();
         closeSettingsModal();
+
         // Show success message
-        document.getElementById('audioPlayer').style.display = 'none';
         document.getElementById('summaryError').style.background = '#d4edda';
         document.getElementById('summaryError').style.borderColor = '#28a745';
         document.getElementById('summaryError').style.color = '#155724';
