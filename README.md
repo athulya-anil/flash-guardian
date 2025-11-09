@@ -1,6 +1,6 @@
 # Halo: AI-Powered Accessibility Extension  
 
-<img src="icons/Halo.gif" width="600">
+<img src="icons/halo.gif" width="600">
 
 **Halo** is a Chrome (Manifest V3) extension that makes the web safer and easier to read.  
 It combines **real-time photosensitive epilepsy protection** with **AI-powered reading assistance** for people with ADHD, dyslexia, and other reading challenges — built entirely in **vanilla JavaScript**, zero dependencies, and 100% local privacy.  
