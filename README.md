@@ -143,4 +143,18 @@ The extension monitors videos using these steps:
 **Switching Between Views:**
 - Click the 🛡️ or 📝 icon in the top-right of the popup to toggle between Flash Protection and Text Summarizer
 
-Built for HackUmass 2025
+
+## Team  
+
+Built by:
+- [**Balachandra DS**](https://github.com/Baluds)
+- [**Athulya Anil**](https://github.com/atl-007)
+- [**Allen Joe Winny**](https://github.com/atl-007)
+
+Created for **HackUMass XIII (2025)**.  
+
+*Inspired by a simple belief — the internet should be safe and inclusive for everyone.*
+
+## License  
+
+[MIT License](LICENSE)
