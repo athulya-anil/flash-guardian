@@ -425,12 +425,11 @@ async function generateSummary(type) {
   }
 
   // Check which provider is configured
-  chrome.storage.sync.get(['aiProvider', 'geminiApiKey', 'groqApiKey'], async (data) => {
-    const provider = data.aiProvider || 'gemini';
-    const apiKey = provider === 'gemini' ? data.geminiApiKey : data.groqApiKey;
+  chrome.storage.sync.get(['geminiApiKey'], async (data) => {
+    const apiKey = data.geminiApiKey ;
 
     if (!apiKey) {
-      showError(`Please configure your ${provider === 'gemini' ? 'Gemini' : 'Groq'} API key first. Click the ⚙️ settings icon at the top.`);
+      showError(`Please configure your Gemini API key first. Click the ⚙️ settings icon at the top.`);
       return;
     }
 
@@ -439,7 +438,7 @@ async function generateSummary(type) {
 
     try {
       // Call appropriate API to summarize
-      const summary = await summarizeText(textInput, type, apiKey, provider);
+      const summary = await summarizeText(textInput, type, apiKey);
       showSummary(summary);
     } catch (error) {
       showError('Error: ' + error.message);
@@ -454,17 +453,16 @@ document.getElementById('aiProvider').addEventListener('change', (e) => {
   const provider = e.target.value;
   if (provider === 'gemini') {
     document.getElementById('geminiKeySection').style.display = 'block';
-    document.getElementById('groqKeySection').style.display = 'none';
-  } else {
+  } else if (provider === 'elevenlabs') {
     document.getElementById('geminiKeySection').style.display = 'none';
-    document.getElementById('groqKeySection').style.display = 'block';
+    document.getElementById('elevenLabsKeySection').style.display = 'block';
   }
 });
 
 // Settings Modal Functions
 function openSettingsModal() {
   // Load existing settings
-  chrome.storage.sync.get(['aiProvider', 'geminiApiKey', 'groqApiKey'], (data) => {
+    chrome.storage.sync.get(['geminiApiKey', 'elevenLabsApiKey', 'voiceId'], (data) => {
     // Set provider
     const provider = data.aiProvider || 'gemini';
     document.getElementById('aiProvider').value = provider;
@@ -476,8 +474,11 @@ function openSettingsModal() {
     if (data.geminiApiKey) {
       document.getElementById('apiKeyInput').value = data.geminiApiKey;
     }
-    if (data.groqApiKey) {
-      document.getElementById('groqApiKeyInput').value = data.groqApiKey;
+    if (data.elevenLabsApiKey) {
+      document.getElementById('elevenLabsApiKeyInput').value = data.elevenLabsApiKey;
+    }
+    if (data.voiceId) {
+      document.getElementById('voiceSelect').value = data.voiceId || 'JBFqnCBsd6RMkjVDRZzb';
     }
   });
   document.getElementById('settingsModal').classList.add('active');
@@ -492,15 +493,18 @@ function closeSettingsModal() {
 document.getElementById('saveSettings').addEventListener('click', () => {
   const provider = document.getElementById('aiProvider').value;
   const geminiKey = document.getElementById('apiKeyInput').value.trim();
-  const groqKey = document.getElementById('groqApiKeyInput').value.trim();
+  const elevenLabsKey = document.getElementById('elevenLabsApiKeyInput').value.trim();
+  const voiceId = document.getElementById('voiceSelect').value;
+
 
   // Validate based on provider
   if (provider === 'gemini' && !geminiKey) {
     alert('Please enter a Gemini API key');
     return;
   }
-  if (provider === 'groq' && !groqKey) {
-    alert('Please enter a Groq API key');
+
+  if (provider === 'elevenlabs' && !elevenLabsKey) {
+    alert('Please enter an ElevenLabs API key');
     return;
   }
 
@@ -508,7 +512,8 @@ document.getElementById('saveSettings').addEventListener('click', () => {
   chrome.storage.sync.set({
     aiProvider: provider,
     geminiApiKey: geminiKey,
-    groqApiKey: groqKey
+    elevenLabsApiKey: elevenLabsKey,
+    voiceId: voiceId
   }, () => {
     closeSettingsModal();
     // Show success message
@@ -516,7 +521,8 @@ document.getElementById('saveSettings').addEventListener('click', () => {
       document.getElementById('summaryError').style.background = '#d4edda';
       document.getElementById('summaryError').style.borderColor = '#28a745';
       document.getElementById('summaryError').style.color = '#155724';
-      showError(`✓ ${provider === 'gemini' ? 'Gemini' : 'Groq'} API key saved! You can now generate summaries.`);
+      errormsg = aiProvider === 'gemini' ? `✓ Gemini API key saved! You can now generate summaries.` : `✓ ElevenLabs API key saved! You can now use Text-to-Speech.`;
+      showError(errormsg);
       setTimeout(() => {
         document.getElementById('summaryError').style.display = 'none';
         document.getElementById('summaryError').style.background = '#ffebee';
@@ -562,8 +568,8 @@ function showError(message) {
   document.getElementById('summaryError').style.display = 'block';
 }
 
-// Call AI API to summarize text (supports Gemini and Groq)
-async function summarizeText(text, type, apiKey, provider = 'gemini') {
+// Call AI API to summarize text (supports Gemini)
+async function summarizeText(text, type, apiKey) {
   const prompts = {
     quick: 'Summarize this article in 2-3 clear, concise sentences. Focus on the main point and key takeaway. DO NOT use markdown formatting like ** or bold. Just plain text:\n\n',
     bullets: 'Summarize this article as 3-5 KEY bullet points only. Focus on the most important takeaways. Keep each bullet point to ONE short sentence. Use simple hyphens (-) for bullets. DO NOT use sub-bullets or nested points. DO NOT use markdown. Be concise:\n\n'
@@ -572,13 +578,7 @@ async function summarizeText(text, type, apiKey, provider = 'gemini') {
   const prompt = prompts[type] + text.substring(0, 15000); // Limit text length
 
   let summary;
-  if (provider === 'gemini') {
-    summary = await summarizeWithGemini(prompt, apiKey);
-  } else if (provider === 'groq') {
-    summary = await summarizeWithGroq(prompt, apiKey);
-  } else {
-    throw new Error('Unknown AI provider: ' + provider);
-  }
+  summary = await summarizeWithGemini(prompt, apiKey);
 
   // Clean up markdown formatting
   summary = cleanMarkdown(summary);
@@ -624,30 +624,19 @@ async function summarizeWithGemini(prompt, apiKey) {
   return data.candidates[0].content.parts[0].text;
 }
 
-// Groq API implementation
-async function summarizeWithGroq(prompt, apiKey) {
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: 'llama-3.1-70b-versatile',
-      messages: [{
-        role: 'user',
-        content: prompt
-      }],
-      temperature: 0.7,
-      max_tokens: 1000
-    })
-  });
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.error?.message || `Groq API error: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return data.choices[0].message.content;
-}
+// Open in Web App button - redirect to companion website
+document.getElementById('openWebAppBtn').addEventListener('click', () => {
+    const textInput = document.getElementById('textInput').value.trim();
+    const type = document.getElementById('summaryType').value;
+    
+    // If there's text, pass it to the web app via URL parameters
+    if (textInput) {
+        const encodedText = encodeURIComponent(textInput);
+        const url = `app.html?text=${encodedText}&type=${type}`;
+        chrome.tabs.create({ url: chrome.runtime.getURL(url) });
+    } else {
+        // If no text, just open the web app
+        chrome.tabs.create({ url: chrome.runtime.getURL('app.html') });
+    }
+});

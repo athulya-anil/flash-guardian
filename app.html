@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Guardian - AI Text Summarizer</title>
+    <link rel="stylesheet" href="styles/app.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>⚡ Flash Guardian</h1>
+                    <p class="tagline">AI-Powered Text Summarizer for Accessibility</p>
+                </div>
+                <button id="settingsBtn" class="settings-btn" title="Settings">
+                    ⚙️ Settings
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="container">
+            <!-- Instructions -->
+            <div class="instructions">
+                <h2>📝 How to Use</h2>
+                <p>Paste or type any article, blog post, or long text below. Our AI will create a clear, easy-to-read summary perfect for people with ADHD, reading difficulties, or anyone who wants to save time.</p>
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-section">
+                <label for="textInput" class="section-label">
+                    Your Text
+                    <span class="char-count" id="charCount">0 characters</span>
+                </label>
+                <textarea 
+                    id="textInput" 
+                    placeholder="Paste your article, blog post, or any long text here..."
+                    rows="15"
+                ></textarea>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <div class="summary-type-selector">
+                    <label for="summaryType">Summary Type:</label>
+                    <select id="summaryType">
+                        <option value="quick">Quick Summary (2-3 sentences)</option>
+                        <option value="bullets">Bullet Points (Key takeaways)</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button id="generateBtn" class="btn btn-primary">
+                        ✨ Generate Summary
+                    </button>
+                    <button id="clearBtn" class="btn btn-secondary">
+                        🗑️ Clear All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="summaryLoading" class="loading-state" style="display: none;">
+                <div class="spinner"></div>
+                <p>Generating your summary...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="summaryError" class="error-message" style="display: none;"></div>
+
+            <!-- Summary Result -->
+            <div id="summaryResult" class="summary-result" style="display: none;">
+                <div class="result-header">
+                    <h3>📄 Your Summary</h3>
+                    <button id="copySummary" class="btn btn-copy">📋 Copy</button>
+                    <button id="downloadSummary" class="btn btn-download">💾 Download</button>
+                    <button id="ttsBtn" class="btn btn-tts">🔊 Listen</button>
+                </div>
+
+                <div id="audioPlayer" class="audio-player" style="display: none;">
+                <audio id="summaryAudio" controls></audio>
+                </div>
+                
+                <div id="summaryText" class="summary-text"></div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features">
+                <h2>✨ Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3>ADHD-Friendly</h3>
+                        <p>Get quick, digestible summaries that help you focus on what matters most.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Fast & Accurate</h3>
+                        <p>Powered by advanced AI Gemini  for reliable summaries in seconds.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">♿</div>
+                        <h3>Accessible Design</h3>
+                        <p>Clean, readable interface designed with accessibility in mind.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Privacy First</h3>
+                        <p>Your API key is stored locally. Your text is only sent to the AI provider you choose.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Settings</h2>
+                <button id="closeModal" class="close-btn">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- AI Provider Selection -->
+                <div class="form-group">
+                    <label for="aiProvider">AI Provider</label>
+                    <select id="aiProvider">
+                        <option value="gemini">Google Gemini</option>
+                        <option value="elevenlabs">ElevenLabs (Text-to-Speech)</option>
+                    </select>
+                </div>
+
+                <!-- Gemini API Key -->
+                <div id="geminiKeySection" class="form-group">
+                    <label for="apiKeyInput">
+                        Gemini API Key
+                        <a href="https://aistudio.google.com/app/apikey" target="_blank" class="help-link">Get API Key →</a>
+                    </label>
+                    <input 
+                        type="password" 
+                        id="apiKeyInput" 
+                        placeholder="Enter your Gemini API key"
+                    />
+                    <p class="help-text">Free tier available. Your key is stored locally in your browser.</p>
+                </div>
+
+                <div id="elevenLabsKeySection" style="display: none;">
+          
+        <div class="form-group" style="margin-bottom: 15px;">
+        <label for="elevenLabsApiKeyInput">
+            ElevenLabs API Key (Optional - for Text-to-Speech)
+            <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" class="help-link">Get API Key →</a>
+        </label>
+        <input 
+            type="password" 
+            id="elevenLabsApiKeyInput" 
+            placeholder="Enter your ElevenLabs API key"
+        />
+    </div>
+
+    <div class="form-group">
+        <label for="voiceSelect">Text-to-Speech Voice</label>
+        <select id="voiceSelect" >
+            <option value="aD6riP1btT197c6dACmy">Rachel (Female, British, Presenter)</option>
+            <option value="AeRdCCKzvd23BpJoofzx">Nathaniel (Male, British, Suspense)</option>
+            <option value="Qggl4b0xRMiqOwhPtVWT">Clara (Female, American, Calm)</option>
+            <option value="pjcYQlDFKMbcOUp6F5GD">Britney (Female, American, Calm)</option>
+            <option value="ErXwobaYiN019PkySvjV">Antoni (Male, American)</option>
+            <option value="Z3R5wn05IrDiVCyEkUrK">Arabella (Female, American, Storyteller)</option>
+            <option value="TxGEqnHWrfWFTfGW9XjX">Josh (Male, American)</option>
+            <option value="VR6AewLTigWG4xSOukaG">Arnold (Male, American)</option>
+            <option value="IRHApOXLvnW57QJPQH2P">Adam (Male, American, Tough)</option>
+            <option value="yoZ06aMxZJJ28mfd3POQ">Sam (Male, American)</option>
+        </select>
+    </div>
+    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="cancelSettings" class="btn btn-secondary">Cancel</button>
+                <button id="saveSettings" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Made with ❤️ for accessibility | Flash Guardian © 2025</p>
+            <p class="footer-note">This tool helps people with ADHD, reading difficulties, and anyone who wants clearer information.</p>
+        </div>
+    </footer>
+
+    <script src="scripts/app.js"></script>
+</body>
+</html>

@@ -473,6 +473,20 @@
     #resetStats:focus-visible {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
     }
+
+
+    /* Add styling for the web app button */
+    .action-btn.web-app {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: 2px solid transparent;
+    }
+
+    .action-btn.web-app:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
   </style>
 </head>
 <body>
@@ -576,6 +590,15 @@
       <div id="summaryLoading" class="info" style="display: none; background: #e3f2fd; border-color: #42a5f5;">
         <strong>⏳ Generating summary...</strong><br>
         Processing your text with AI
+      <div>
+        <button id="openWebAppBtn" style="background: rgba(255, 255, 255, 0.9); color: #4a4a4a; border: 2px solid rgba(0, 0, 0, 0.1); padding: 14px 20px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 600; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease;">
+        Open
+        </button>
+      </div>
+
+      <div id="summaryResult" class="stats" style="display: none;">
+        <h3 style="margin: 0 0 12px 0;">Summary</h3>
+        <div id="summaryText" style="font-size: 14px; line-height: 1.6; color: #000000; white-space: pre-wrap;"></div>
       </div>
 
       <div id="summaryError" class="info" style="display: none; background: #ffebee; border-color: #ef5350; color: #c62828; white-space: pre-wrap;">
@@ -612,7 +635,7 @@
         <label for="aiProvider" style="display: block; margin-bottom: 8px;">AI Provider</label>
         <select id="aiProvider" style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; margin-bottom: 15px;">
           <option value="gemini">Google Gemini (Recommended)</option>
-          <option value="groq">Groq (Free Alternative)</option>
+          <option value="elevenlabs">ElevenLabs (Text-to-Speech)</option>
         </select>
 
         <div id="geminiKeySection">
@@ -623,14 +646,37 @@
           </div>
         </div>
 
-        <div id="groqKeySection" style="display: none;">
-          <label for="groqApiKeyInput">Groq API Key</label>
-          <input type="password" id="groqApiKeyInput" placeholder="Enter your Groq API key">
-          <div class="modal-info">
-            Get your free API key at: <a href="https://console.groq.com/keys" target="_blank">Groq Console</a>
-            <br>Free tier: 30 requests/min, very fast responses
-          </div>
-        </div>
+        <div id="elevenLabsKeySection" style="display: none;">
+          
+        <div class="form-group" style="margin-bottom: 15px;">
+        <label for="elevenLabsApiKeyInput">
+            ElevenLabs API Key (Optional - for Text-to-Speech)
+            <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" class="help-link">Get API Key →</a>
+        </label>
+        <input 
+            type="password" 
+            id="elevenLabsApiKeyInput" 
+            placeholder="Enter your ElevenLabs API key"
+        />
+    </div>
+
+    <div class="form-group">
+        <label for="voiceSelect">Text-to-Speech Voice</label>
+        <select id="voiceSelect" style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; margin-bottom: 15px;" >
+            <option value="aD6riP1btT197c6dACmy">Rachel (Female, British, Presenter)</option>
+            <option value="AeRdCCKzvd23BpJoofzx">Nathaniel (Male, British, Suspense)</option>
+            <option value="Qggl4b0xRMiqOwhPtVWT">Clara (Female, American, Calm)</option>
+            <option value="pjcYQlDFKMbcOUp6F5GD">Britney (Female, American, Calm)</option>
+            <option value="ErXwobaYiN019PkySvjV">Antoni (Male, American)</option>
+            <option value="Z3R5wn05IrDiVCyEkUrK">Arabella (Female, American, Storyteller)</option>
+            <option value="TxGEqnHWrfWFTfGW9XjX">Josh (Male, American)</option>
+            <option value="VR6AewLTigWG4xSOukaG">Arnold (Male, American)</option>
+            <option value="IRHApOXLvnW57QJPQH2P">Adam (Male, American, Tough)</option>
+            <option value="yoZ06aMxZJJ28mfd3POQ">Sam (Male, American)</option>
+        </select>
+    </div>
+    </div>
+    
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" id="cancelSettings">Cancel</button>
