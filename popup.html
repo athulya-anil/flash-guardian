@@ -610,7 +610,6 @@
         <label for="aiProvider" style="display: block; margin-bottom: 8px;">AI Provider</label>
         <select id="aiProvider" style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; margin-bottom: 15px;">
           <option value="gemini">Google Gemini (Recommended)</option>
-          <option value="groq">Groq (Free Alternative)</option>
           <option value="elevenlabs">ElevenLabs (Text-to-Speech)</option>
         </select>
 
@@ -619,15 +618,6 @@
           <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API key">
           <div class="modal-info">
             Get your free API key at: <a href="https://aistudio.google.com/welcome" target="_blank">Google AI Studio</a>
-          </div>
-        </div>
-
-        <div id="groqKeySection" style="display: none;">
-          <label for="groqApiKeyInput">Groq API Key</label>
-          <input type="password" id="groqApiKeyInput" placeholder="Enter your Groq API key">
-          <div class="modal-info">
-            Get your free API key at: <a href="https://console.groq.com/keys" target="_blank">Groq Console</a>
-            <br>Free tier: 30 requests/min, very fast responses
           </div>
         </div>
 
