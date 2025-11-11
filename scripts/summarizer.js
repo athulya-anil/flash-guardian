@@ -139,4 +139,4 @@ function findMainContentByTextDensity() {
   return bestElement;
 }
 
-console.log('[Halo Summarizer] Content script loaded');
+// Summarizer content script loaded (debug omitted)

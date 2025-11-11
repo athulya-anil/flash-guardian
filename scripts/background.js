@@ -22,9 +22,7 @@ async function createOffscreenDocument() {
       justification: 'Play background meditation music'
     });
     offscreenDocumentCreated = true;
-    console.log('[Halo Background] Offscreen document created');
   } catch (error) {
-    console.error('[Halo Background] Error creating offscreen document:', error);
   }
 }
 
@@ -68,17 +66,14 @@ function resetStats() {
   };
 
   chrome.storage.local.set({ stats: resetStatsObj }, () => {
-    console.log('[Halo Background] Stats reset to zero in local storage');
   });
 
   chrome.storage.sync.set({ stats: resetStatsObj }, () => {
-    console.log('[Halo Background] Stats reset to zero in sync storage');
   });
 }
 
 // Listen for messages from content scripts and popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('[Halo Background] Received message:', request);
 
   // Handle audio control messages - forward to offscreen document
   if (request.action === 'startAudio' || request.action === 'stopAudio' || request.action === 'getAudioState') {
@@ -89,7 +84,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse(response);
       });
     }).catch((error) => {
-      console.error('[Halo Background] Error with offscreen document:', error);
       sendResponse({ success: false, error: error.message });
     });
     return true; // Keep message channel open for async response
@@ -107,40 +101,33 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             flashesDetected: 0
           };
 
-          console.log('[Halo Background] Current stats:', stats);
-          console.log('[Halo Background] Update type:', request.stat);
+
 
           // Update stats based on the request
           if (request.stat === 'videoMonitored') {
             stats.videosMonitored++;
-            console.log('[Halo Background] Incremented videosMonitored to:', stats.videosMonitored);
           }
           if (request.stat === 'warningIssued') {
             stats.warningsIssued++;
-            console.log('[Halo Background] Incremented warningsIssued to:', stats.warningsIssued);
           }
           if (request.stat === 'flashDetected') {
             stats.flashesDetected += request.count || 1;
-            console.log('[Halo Background] Incremented flashesDetected by', request.count || 1, 'to:', stats.flashesDetected);
           }
 
           // Save to both storages simultaneously
           const localSave = new Promise(saveResolve => {
             chrome.storage.local.set({ stats }, () => {
-              console.log('[Halo Background] Stats saved to local storage:', stats);
               saveResolve();
             });
           });
 
           const syncSave = new Promise(saveResolve => {
             chrome.storage.sync.set({ stats }, () => {
-              console.log('[Halo Background] Stats saved to sync storage:', stats);
               saveResolve();
             });
           });
 
           Promise.all([localSave, syncSave]).then(() => {
-            console.log('[Halo Background] Stats saved to both storages successfully');
             sendResponse({ success: true, stats });
             resolve();
           });
@@ -154,7 +141,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Initialize default settings on install (first time only)
 chrome.runtime.onInstalled.addListener((details) => {
-  console.log('[Halo] onInstalled event:', details.reason);
 
   if (details.reason === 'install') {
     // First time installation - set defaults in both storages
@@ -171,7 +157,6 @@ chrome.runtime.onInstalled.addListener((details) => {
     };
     chrome.storage.sync.set(defaultSettings);
     chrome.storage.local.set(defaultSettings);
-    console.log('[Halo] Extension installed with default settings');
   } else if (details.reason === 'update') {
     // Extension updated - preserve existing stats, ensure settings exist
     // Check both local and sync storage to preserve stats
@@ -201,7 +186,6 @@ chrome.runtime.onInstalled.addListener((details) => {
             }
           });
         }
-        console.log('[Halo] Extension updated, settings preserved');
       });
     });
   }
@@ -214,7 +198,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const platform = getPlatformFromUrl(tab.url);
     if (platform) {
       platformTabs[platform].add(tabId);
-      console.log(`[Halo Background] Tab ${tabId} added to ${platform}. Active tabs:`, platformTabs[platform].size);
     }
   }
 
@@ -226,14 +209,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     for (const [platform, tabSet] of Object.entries(platformTabs)) {
       if (tabSet.has(tabId) && platform !== newPlatform) {
         tabSet.delete(tabId);
-        console.log(`[Halo Background] Tab ${tabId} navigated away from ${platform}. Remaining tabs:`, tabSet.size);
       }
     }
 
     // Add to new platform if applicable
     if (newPlatform) {
       platformTabs[newPlatform].add(tabId);
-      console.log(`[Halo Background] Tab ${tabId} navigated to ${newPlatform}`);
     }
   }
 });
@@ -245,7 +226,6 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
       const platform = getPlatformFromUrl(tab.url);
       if (platform) {
         platformTabs[platform].add(activeInfo.tabId);
-        console.log(`[Halo Background] Tab ${activeInfo.tabId} activated for ${platform}`);
       }
     }
   });
@@ -253,13 +233,11 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 
 // Track when tabs are removed
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
-  console.log(`[Halo Background] Tab ${tabId} removed`);
 
   // Remove the tab from all platform sets
   for (const [platform, tabSet] of Object.entries(platformTabs)) {
     if (tabSet.has(tabId)) {
       tabSet.delete(tabId);
-      console.log(`[Halo Background] Tab ${tabId} removed from ${platform}. Remaining tabs:`, tabSet.size);
     }
   }
 });

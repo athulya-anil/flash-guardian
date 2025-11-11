@@ -10,7 +10,6 @@
 // Check if extension context is valid before running
 // Only throw if chrome is completely undefined, otherwise continue
 if (typeof chrome === 'undefined') {
-  console.log('[Halo] Chrome API not available');
   throw new Error('Chrome API not available');
 }
 
@@ -192,16 +191,13 @@ class FlashDetector {
 
           // Trigger warning if threshold exceeded
           if (this.flashTimestamps.length >= this.FLASH_FREQUENCY) {
-            console.log('[Halo] THRESHOLD EXCEEDED! Flashes in last second:', this.flashTimestamps.length);
             this.triggerWarning('general', this.flashTimestamps.length);
           } else if (this.redFlashTimestamps.length >= this.FLASH_FREQUENCY) {
-            console.log('[Halo] RED FLASH THRESHOLD EXCEEDED! Red flashes in last second:', this.redFlashTimestamps.length);
             this.triggerWarning('red', this.redFlashTimestamps.length);
           }
 
           // Log flash activity for debugging
           if (this.flashTimestamps.length > 0) {
-            console.log('[Halo] Flash detected! Total in last second:', this.flashTimestamps.length, 'Total overall:', this.totalFlashes);
           }
         }
 
@@ -217,7 +213,6 @@ class FlashDetector {
 
     } catch (error) {
       // Other unexpected errors
-      console.error('[Halo] Unexpected error during frame analysis:', error);
     }
 
     // Continue analyzing
@@ -231,7 +226,6 @@ class FlashDetector {
    */
   triggerWarning(type, flashCount) {
     // Report warning to popup - wrap in try-catch for extension context errors
-    console.log('[Halo] Sending warningIssued message to background');
     if (this.warningShown) return;
 
     this.warningShown = true;
@@ -247,36 +241,21 @@ class FlashDetector {
         action: 'updateStats',
         stat: 'warningIssued'
       }).then(response => {
-        console.log('[Halo] warningIssued message sent, response:', response);
       }).catch(error => {
-        if (error.message && error.message.includes('Extension context invalidated')) {
-          console.log('[Halo] Extension was reloaded, cannot send warningIssued message');
-        } else {
-          console.error('[Halo] Error sending warningIssued message:', error);
-        }
       });
     } catch (error) {
-      console.log('[Halo] Cannot send warningIssued message, extension context may be invalid');
     }
 
     // Report flashes detected - wrap in try-catch for extension context errors
-    console.log('[Halo] Sending flashDetected message to background, count:', this.totalFlashes);
     try {
       chrome.runtime.sendMessage({
         action: 'updateStats',
         stat: 'flashDetected',
         count: this.totalFlashes
       }).then(response => {
-        console.log('[Halo] flashDetected message sent, response:', response);
       }).catch(error => {
-        if (error.message && error.message.includes('Extension context invalidated')) {
-          console.log('[Halo] Extension was reloaded, cannot send flashDetected message');
-        } else {
-          console.error('[Halo] Error sending flashDetected message:', error);
-        }
       });
     } catch (error) {
-      console.log('[Halo] Cannot send flashDetected message, extension context may be invalid');
     }
 
     // Dispatch custom event for warning UI
@@ -321,7 +300,6 @@ class FlashDetector {
     this.flashTimestamps = [];
     this.redFlashTimestamps = [];
     this.analyzedFrameCount = 0;
-    console.log('[Halo] Detection state reset');
   }
 
   /**
@@ -336,7 +314,6 @@ class FlashDetector {
     this.maxFlashesPerSecond = 0;
     this.resetDetectionState();
 
-    console.log('[Halo] Started monitoring video');
     this.analyzeFrame();
   }
 
@@ -345,7 +322,6 @@ class FlashDetector {
    */
   stop() {
     this.isAnalyzing = false;
-    console.log('[Halo] Stopped monitoring video');
   }
 
   /**
@@ -367,7 +343,6 @@ function speakWarning(flashCount) {
 
   // Check if speech synthesis is supported
   if (!window.speechSynthesis) {
-    console.log('[Flash Guardian] Speech synthesis not supported');
     return;
   }
 
@@ -398,7 +373,6 @@ function speakWarning(flashCount) {
 
 // Main execution
 (function() {
-  console.log('[Halo] Content script loaded');
 
   const detectors = new Map();
   const visitedVideos = new Set(); // Track unique videos to prevent duplicate counting
@@ -411,7 +385,6 @@ function speakWarning(flashCount) {
     new Promise(resolve => {
       chrome.storage.sync.get(['enabled'], (data) => {
         protectionEnabled = data.enabled !== false;
-        console.log('[Halo] Protection enabled:', protectionEnabled);
         resolve();
       });
     }).catch(error => {
@@ -423,14 +396,12 @@ function speakWarning(flashCount) {
       chrome.storage.local.get(['visitedVideos'], (data) => {
         if (data.visitedVideos && Array.isArray(data.visitedVideos)) {
           data.visitedVideos.forEach(videoId => visitedVideos.add(videoId));
-          console.log('[Halo] Loaded', visitedVideos.size, 'previously visited videos');
         }
         resolve();
       });
     })
   ]).then(() => {
     storageLoaded = true;
-    console.log('[Halo] Storage loaded, ready to initialize');
     // Now find and monitor videos
     findAndMonitorVideos();
   });
@@ -467,13 +438,11 @@ function speakWarning(flashCount) {
   function initializeDetector(video) {
     // Don't initialize if protection is disabled
     if (!protectionEnabled) {
-      console.log('[Halo] Protection disabled, skipping video initialization');
       return;
     }
 
     // CRITICAL: Don't initialize until storage is loaded
     if (!storageLoaded) {
-      console.log('[Halo] Storage not loaded yet, deferring initialization');
       setTimeout(() => initializeDetector(video), 100);
       return;
     }
@@ -484,11 +453,10 @@ function speakWarning(flashCount) {
     // For YouTube, use the video ID from URL instead of video src
     const videoId = getVideoId();
 
-    // Don't process videos on non-watch/non-shorts pages (homepage, search, etc.)
-    // if (!videoId) {
-    //   console.log('[Halo] Not on a watch or shorts page, skipping video initialization');
-    //   return;
-    // }
+  // Don't process videos on non-watch/non-shorts pages (homepage, search, etc.)
+  // if (!videoId) {
+  //   return;
+  // }
 
     // If no source yet, wait for it
     if (!currentSrc) {
@@ -500,24 +468,17 @@ function speakWarning(flashCount) {
     const previousVideoId = video.dataset.flashGuardianVideoId;
     const isNewVideo = (previousSrc !== currentSrc) || (previousVideoId !== videoId);
 
-    console.log('[Halo] initializeDetector called:', {
-      videoId,
-      previousVideoId,
-      isNewVideo,
-      hasDetector: detectors.has(video),
-      alreadyVisited: visitedVideos.has(videoId)
-    });
+    // initializeDetector called (debug info omitted)
 
     // If video element already has a detector
-    if (detectors.has(video)) {
+      if (detectors.has(video)) {
       // If it's the same video, don't reinitialize
       if (!isNewVideo) {
-        console.log('[Halo] Same video, skipping initialization');
         return;
       }
 
       // New video in same element - stop old detector and create new one
-      console.log('[Halo] New video detected in existing element');
+  // New video detected in existing element
       const oldDetector = detectors.get(video);
       oldDetector.stop();
       detectors.delete(video);
@@ -526,7 +487,6 @@ function speakWarning(flashCount) {
     // Additional guard: If this exact videoId has already been processed, skip
     // This handles the case where initializeDetector is called twice in rapid succession
     if (visitedVideos.has(videoId) && video.dataset.flashGuardianVideoId === videoId) {
-      console.log('[Halo] Video already processed and counted, skipping. ID:', videoId);
       return;
     }
 
@@ -544,19 +504,17 @@ function speakWarning(flashCount) {
     const detector = new FlashDetector(video, videoId, warnedVideos, () => protectionEnabled);
     detectors.set(video, detector);
 
-    console.log('[Halo] Created new detector for video ID:', videoId, 'visitedVideos size:', visitedVideos.size);
+  // Created new detector for video ID (debug omitted)
 
     // Report video monitored to popup (only for unique videos never seen before)
     const alreadyVisited = visitedVideos.has(videoId);
 
-    if (!alreadyVisited) {
+  if (!alreadyVisited) {
       // Add to set IMMEDIATELY to prevent double-counting if called twice rapidly
-      visitedVideos.add(videoId);
-      console.log('[Halo] New unique video detected, ID:', videoId, 'Total unique videos:', visitedVideos.size);
+  visitedVideos.add(videoId);
 
       // Save visited videos to storage FIRST for persistence
       chrome.storage.local.set({ visitedVideos: Array.from(visitedVideos) }, () => {
-        console.log('[Halo] Saved visited videos to storage, size:', visitedVideos.size);
 
         // THEN send the message to update stats
         try {
@@ -564,7 +522,6 @@ function speakWarning(flashCount) {
             action: 'updateStats',
             stat: 'videoMonitored'
           }).then(response => {
-            console.log('[Halo] videoMonitored message sent successfully, response:', response);
           }).catch(error => {
             if (error && error.message && error.message.includes('Extension context invalidated')) {
               console.warn('[Halo] Extension was reloaded, cannot send message');
@@ -577,14 +534,12 @@ function speakWarning(flashCount) {
         }
       });
     } else {
-      console.log('[Halo] Video already visited, not counting again. ID:', videoId, 'Total videos in set:', visitedVideos.size);
     }
 
     setupVideoEventListeners(video, detector);
 
     // If video is already playing, start detection immediately (only if protection enabled)
     if (!video.paused && protectionEnabled) {
-      console.log('[Halo] Video already playing, starting detection');
       detector.start();
     }
   }
@@ -603,13 +558,11 @@ function speakWarning(flashCount) {
     video.addEventListener('play', () => {
       // Only start detection if protection is enabled
       if (!protectionEnabled) {
-        console.log('[Halo] Protection disabled, not starting detection');
         return;
       }
 
       // If playing from the beginning (first 3 seconds), reset warning
       if (video.currentTime < 3) {
-        console.log('[Halo] Video playing from beginning, resetting warning flag');
         detector.warningShown = false;
         detector.totalFlashes = 0;
         detector.maxFlashesPerSecond = 0;
@@ -623,12 +576,11 @@ function speakWarning(flashCount) {
     });
 
     // Reset detection state when seeking to avoid false positives
-    video.addEventListener('seeking', () => {
+      video.addEventListener('seeking', () => {
       detector.resetDetectionState();
 
       // If seeking backwards or to the beginning, allow warning to show again
       if (video.currentTime < 10) {
-        console.log('[Halo] Seeking to early part of video, resetting warning flag');
         detector.warningShown = false;
         detector.totalFlashes = 0;
         detector.maxFlashesPerSecond = 0;
@@ -640,7 +592,7 @@ function speakWarning(flashCount) {
       detector.stop();
     });
 
-    console.log('[Halo] Setup event listeners for video:', video);
+  // Setup event listeners for video (debug info omitted)
   }
 
   /**
@@ -649,12 +601,11 @@ function speakWarning(flashCount) {
   function findAndMonitorVideos() {
     // Don't initialize until storage is loaded
     if (!storageLoaded) {
-      console.log('[Halo] Waiting for storage to load before monitoring videos');
       return;
     }
 
     const videos = document.querySelectorAll('video');
-    console.log(`[Halo] Found ${videos.length} video(s) on page`);
+  // Found videos on page (debug omitted)
     videos.forEach(video => initializeDetector(video));
   }
 
@@ -680,7 +631,6 @@ function speakWarning(flashCount) {
   document.addEventListener('flashDetected', (event) => {
     // Only show warning if protection is enabled
     if (!protectionEnabled) {
-      console.log('[Halo] Warning suppressed - protection is disabled');
       return;
     }
     showWarningOverlay(event.detail);
@@ -689,7 +639,6 @@ function speakWarning(flashCount) {
   // Listen for messages from popup (e.g., enable/disable, reset stats)
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'enable') {
-      console.log('[Halo] Protection enabled');
       protectionEnabled = true;
       // Start all detectors if videos are playing
       detectors.forEach(detector => {
@@ -698,7 +647,6 @@ function speakWarning(flashCount) {
         }
       });
     } else if (request.action === 'disable') {
-      console.log('[Halo] Protection disabled');
       protectionEnabled = false;
       // Stop all detectors
       detectors.forEach(detector => detector.stop());
@@ -709,14 +657,13 @@ function speakWarning(flashCount) {
         overlay.style.display = 'none';
       }
     } else if (request.action === 'resetStats') {
-      console.log('[Halo] Clearing visited videos cache and warned videos');
+      // Clearing visited videos cache and warned videos
       // Clear the visited videos set so videos can be counted again
       visitedVideos.clear();
       // Clear the warned videos set so warnings can be issued again
       warnedVideos.clear();
       // Also clear from storage
       chrome.storage.local.set({ visitedVideos: [] }, () => {
-        console.log('[Halo] Cleared visited videos from storage');
       });
     }
     sendResponse({ success: true });
@@ -730,11 +677,11 @@ function speakWarning(flashCount) {
     // Check if extension context is still valid
     try {
       if (!chrome.runtime?.id) {
-        console.log('[Halo] Extension context invalidated, stopping overlay creation');
+        // Extension context invalidated
         return;
       }
     } catch (e) {
-      console.log('[Halo] Extension context invalidated');
+      // Extension context invalidated
       return;
     }
 
@@ -749,7 +696,7 @@ function speakWarning(flashCount) {
       try {
         warningIconUrl = chrome.runtime.getURL('icons/warning.png');
       } catch (e) {
-        console.log('[Halo] Cannot get icon URL, extension context invalidated');
+        // Cannot get icon URL; extension context invalidated
         return;
       }
 
@@ -789,6 +736,15 @@ function speakWarning(flashCount) {
       // Add event listeners
       document.getElementById('halo-continue').addEventListener('click', () => {
         const videos = document.querySelectorAll('video');
+        // Stop any speech warnings before resuming playback
+        try {
+          if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') {
+            window.speechSynthesis.cancel();
+          }
+        } catch (e) {
+          // Ignore if speechSynthesis isn't available or cancel fails
+        }
+
         videos.forEach(video => {
           const detector = detectors.get(video);
           if (detector) {
@@ -796,6 +752,7 @@ function speakWarning(flashCount) {
             video.play();
           }
         });
+
         overlay.style.display = 'none';
       });
 
@@ -805,6 +762,15 @@ function speakWarning(flashCount) {
           video.pause();
           // Keep video at current position instead of resetting
         });
+        // Stop any speech warnings when pausing the video
+        try {
+          if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') {
+            window.speechSynthesis.cancel();
+          }
+        } catch (e) {
+          // Ignore if speechSynthesis isn't available or cancel fails
+        }
+
         overlay.style.display = 'none';
 
         // Optionally close the tab or go back

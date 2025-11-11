@@ -153,6 +153,10 @@ Built by:
 
 Created for **HackUMass XIII (2025)**.  
 
+[**Devpost Submission**](https://devpost.com/software/halo-u73r9j)
+
+[**Demo**](https://www.youtube.com/watch?v=nM_yWSplYBo)
+
 *Inspired by a simple belief — the internet should be safe and inclusive for everyone.*
 
 ## License  

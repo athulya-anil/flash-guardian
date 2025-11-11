@@ -7,7 +7,7 @@ let audioElement = null;
 
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('[Halo Offscreen] Received message:', request);
+  // Offscreen received message (debug omitted)
 
   if (request.action === 'startAudio') {
     const soundFile = request.soundFile;
@@ -29,12 +29,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
       if (playPromise !== undefined) {
         playPromise.then(() => {
-          console.log('[Halo Offscreen] Audio started:', soundFile);
+          // Offscreen audio started (debug omitted)
           sendResponse({ success: true });
         }).catch((error) => {
           // Ignore "interrupted" errors as they're harmless
           if (error.name === 'AbortError') {
-            console.log('[Halo Offscreen] Audio play was interrupted (harmless)');
+            // Audio play was interrupted (harmless)
             sendResponse({ success: true });
           } else {
             console.error('[Halo Offscreen] Error playing audio:', error);
@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         audioElement.currentTime = 0;
         audioElement.src = '';
         audioElement = null;
-        console.log('[Halo Offscreen] Audio stopped');
+  // Offscreen audio stopped (debug omitted)
       }
       sendResponse({ success: true });
     } catch (error) {
@@ -75,4 +75,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-console.log('[Halo Offscreen] Audio player initialized');
+// Offscreen audio player initialized (debug omitted)
